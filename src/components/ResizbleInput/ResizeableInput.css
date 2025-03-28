@@ -1,0 +1,6 @@
+.resizeable__span {
+    text-wrap: nowrap;
+    white-space: pre;
+    height: 0px;
+    color: rgba(0, 0, 0, 0);
+}
