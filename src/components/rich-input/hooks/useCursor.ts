@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface AttributeObj {
     hidden: boolean,
@@ -53,7 +53,7 @@ export default function useCursor() {
         }
 
         //moves the cursor to the next, non-hidden attribute. Defaults to -1 if none is found;
-        setCursor(-1);
+        let newCursor = -1;
         const queue = [removedIndex];
         const visited = new Set<number>();
 
@@ -72,10 +72,12 @@ export default function useCursor() {
                 if (!visited.has(index + 1)) queue.push(index + 1);
                 return;
             } else {
-                setCursor(index);
+                newCursor = index;
                 break;
             }
         }
+
+        setCursor(newCursor);
     }
 
     const current = (cursor == -1)
@@ -119,7 +121,51 @@ export default function useCursor() {
         return attributes.current.find((attribute) => attribute.name == name);
     }
 
+    useEffect(() => {
+        console.log(cursor);
+    }, [cursor]);
+
+    /** called whenever the content of the attributes has changed */
+    const updateCursor = () => {
+
+        //moves the cursor to the nearest non-hidden attribute if it's original value was -1;
+        if (cursor == -1) {
+            const newCursor = attributes.current.findIndex((attribute) => !attribute.hidden);
+            if (newCursor) setCursor(newCursor);
+            return;
+        };
+
+        
+        //moves the cursor if the current focus item has been hidden to the nearest one.
+        if (attributes.current[cursor].hidden) {
+            let newCursor = -1;
+            const queue = [cursor + 1, cursor - 1];
+            const visited: number[] = [cursor];
+
+            while (queue.length != 0) {
+                const current = queue.shift();
+                if (current == undefined) return;
+                if (current >= attributes.current.length || current < 0) continue;
+                if (attributes.current[current].hidden) {
+                    if (!visited.includes(current + 1) && !queue.includes(current + 1)) {
+                        queue.push(current + 1);
+                    }
+                    if (!visited.includes(current - 1) && !queue.includes(current - 1)) {
+                        queue.push(current - 1);
+                    }
+                    visited.push(current);
+                } else {
+                    newCursor = current;
+                    break;
+                }
+            }
+
+            setCursor(newCursor);
+        }
+    }
+
     return {
+        updateCursor,
         attributes: attributes.current,
         addToList,
         removeFromList,

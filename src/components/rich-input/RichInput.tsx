@@ -86,6 +86,7 @@ const RichInput: React.FC<RichInputProps> = (props) => {
     }
 
     const setSecondaryInput = (input: string) => {
+
         cursor.attributes.forEach((attribute) => {
             if (attribute.name.slice(0, input.length) == input) {
                 attribute.hidden = false
@@ -93,6 +94,7 @@ const RichInput: React.FC<RichInputProps> = (props) => {
                 attribute.hidden = true
             }
         })
+        cursor.updateCursor();
         _setSecondaryInput(input);
     }
 
