@@ -5,9 +5,7 @@ import { createUID } from "../../utilities/createUID";
 import { useEffect, useState } from "react";
 import BoundingBox from "../../utilities/boundingBox";
 
-type AttributeMenuProps = React.HTMLAttributes<HTMLDivElement> & {
-
-}
+type AttributeMenuProps = React.HTMLAttributes<HTMLDivElement> & { }
 
 /** The component that renders all attribute children it controls when it shows up based on the input state*/
 const AttributeMenu: React.FC<AttributeMenuProps> = ({className, ...props}) => {

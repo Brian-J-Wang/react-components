@@ -1,21 +1,23 @@
 import { useRef, useState } from "react";
 
-interface AttributeNode {
+interface AttributeObj {
     hidden: boolean,
     name: string
 }
 
 export type CursorController = {
+    attributes: AttributeObj[],
     addToList: (name: string) => void,
     removeFromList: (name: string) => void,
-    current: AttributeNode,
+    current: AttributeObj,
     move: (direction: "up" | "down") => void,
     jumpToIndex: (index: number) => void,
-    jumpToAttribute: (name: string) => void
+    jumpToAttribute: (name: string) => void,
+    getAttribute: (name: string) => AttributeObj | undefined
 }
 
 export default function useCursor() {
-    const attributes = useRef<AttributeNode[]>([]);
+    const attributes = useRef<AttributeObj[]>([]);
     const [ cursor, setCursor ] = useState<number>(-1);
 
     const addToList = (name: string) => {
@@ -23,7 +25,7 @@ export default function useCursor() {
             throw new Error("Attribute already exists");
         }
 
-        const attribute: AttributeNode = {
+        const attribute: AttributeObj = {
             hidden: false,
             name: name
         }
@@ -113,12 +115,18 @@ export default function useCursor() {
         return true;
     }
 
+    const getAttribute = (name: string) => {
+        return attributes.current.find((attribute) => attribute.name == name);
+    }
+
     return {
+        attributes: attributes.current,
         addToList,
         removeFromList,
         current,
         move,
         jumpToIndex,
-        jumpToAttribute
+        jumpToAttribute,
+        getAttribute
     }
 }

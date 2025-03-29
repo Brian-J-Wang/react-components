@@ -17,14 +17,12 @@ export interface RichInputAttributeProps {
  *  The menuDisplay component will be shown if inputState is "filteringAttribute".
 */
 const Attribute: React.FC<RichInputAttributeProps> = (props) => {
-    const { cursor, state } = requireContext(RichInputContext);
+    const { cursor, state, secondaryInput } = requireContext(RichInputContext);
 
     useEffect(() => {
-        console.log(`adding attribute: ${props.name}`);
         cursor.addToList(props.name);
 
         return () => {
-            console.log(`removing attribute: ${props.name}`);
             cursor.removeFromList(props.name);
         }
     }, [] );
@@ -39,7 +37,9 @@ const Attribute: React.FC<RichInputAttributeProps> = (props) => {
     }
 
     const isSelected = cursor.current.name == props.name;
-    if (state.current == "secondary") {
+    const notHidden = cursor.getAttribute(props.name)?.hidden ?? true;
+
+    if (state.current == "secondary" && notHidden) {
         return (
             <div className="flex" onClick={handleClick} onMouseEnter={handleMouseEnter}>
                 {props.menuDisplay(isSelected)}

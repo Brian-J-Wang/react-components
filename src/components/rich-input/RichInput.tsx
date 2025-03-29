@@ -3,7 +3,6 @@ import useCursor, { CursorController } from "./hooks/useCursor";
 import useComponentState, { StateController } from "./hooks/useComponentState";
 import useAttributes, { AttributesController } from "./hooks/useAttributesController";
 
-
 interface RichInputContextProps {
     cursor: CursorController,
     state: StateController,
@@ -12,7 +11,16 @@ interface RichInputContextProps {
     primaryInput: string,
     setPrimaryInput: React.Dispatch<React.SetStateAction<string>>,
     secondaryInput: string,
-    setSecondaryInput: React.Dispatch<React.SetStateAction<string>>
+    setSecondaryInput: (value: string) => void,
+    submit: () => void
+}
+
+type SubmissionItem = {
+    input: string,
+    attributes: {
+        key: string,
+        value: any
+    }[]
 }
 
 export const RichInputContext = createContext<RichInputContextProps>({
@@ -32,13 +40,14 @@ export const RichInputContext = createContext<RichInputContextProps>({
     primaryInput: "",
     setPrimaryInput: () => {},
     secondaryInput: "",
-    setSecondaryInput: () => {}
+    setSecondaryInput: () => {},
+    submit: () => {}
 });
 
 interface RichInputProps {
     className?: string
     children: ReactNode,
-    onSubmit: () => void,
+    onSubmit: (submission: SubmissionItem) => void,
 }
 
 /**
@@ -54,7 +63,7 @@ const RichInput: React.FC<RichInputProps> = (props) => {
     const cursor = useCursor();
     const attribute = useAttributes();
     const [ primaryInput, setPrimaryInput ] = useState<string>("");
-    const [ secondaryInput, setSecondaryInput ] = useState<string>("");
+    const [ secondaryInput, _setSecondaryInput ] = useState<string>("");
 
     const setAttributeValue = (value: any) => {
         attribute.add({
@@ -64,9 +73,30 @@ const RichInput: React.FC<RichInputProps> = (props) => {
         state.setState("primary");
     }
 
+    const submit = () => {
+        props.onSubmit({
+            input: primaryInput,
+            attributes: attribute.current
+        })
+
+        setPrimaryInput("");
+        attribute.clear();
+    }
+
+    const setSecondaryInput = (input: string) => {
+        cursor.attributes.forEach((attribute) => {
+            if (attribute.name.slice(0, input.length) == input) {
+                attribute.hidden = true
+            } else {
+                attribute.hidden = false
+            }
+        })
+        _setSecondaryInput(input);
+    }
+
     return (
         <RichInputContext.Provider value={{
-            cursor, state, attribute, setAttributeValue, primaryInput, setPrimaryInput, secondaryInput, setSecondaryInput
+            cursor, state, attribute, setAttributeValue, primaryInput, setPrimaryInput, secondaryInput, setSecondaryInput, submit
         }}>
             <div className={props.className}>
                 {props.children}

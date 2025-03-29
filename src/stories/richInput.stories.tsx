@@ -6,6 +6,7 @@ import AttributeMenu from "../components/rich-input/AttributeMenu";
 import Attribute from "../components/rich-input/Attribute";
 import { twMerge } from "tailwind-merge";
 import requireContext from "../utilities/requireContext";
+import Submit from "../components/rich-input/Submit";
 
 const Component = () => {
     return (
@@ -18,7 +19,11 @@ const Component = () => {
             <div className="flex flex-row items-center w-full pl-[2px] h-6 text-sm font-semibold border-[1px] border-neutral-300 rounded">
                 <SecondaryInput className={"bg-blue-300 text-[10px] h-4 rounded-[10px]"}/>
                 <PrimaryInput className="outline-none " placeholder="Enter name, or type '/' to filter by attributes" />
+                <Submit className="px-2 bg-blue-200">
+                    Submit
+                </Submit>
             </div>
+            <AttributeBar/>
         </RichInput>
     )
 }
@@ -26,16 +31,22 @@ const Component = () => {
 const HairLengthAttribute = () => {
     const { setAttributeValue } = requireContext(RichInputContext);
 
-    const handleClick = () => {
-        setAttributeValue("Maine Coon");
+    const setValue = (value: string) => () => {
+        setAttributeValue(value);
+    }
+
+    const menuDisplay = (isSelected: boolean) => {
+        return <small className={twMerge("hover:bg-slate-100 cursor-pointer w-full", isSelected ? "bg-slate-100" : "")}>Hair Length</small>
     }
 
     return (
-        <Attribute name="hair length" menuDisplay={(isSelected) => {
-            return <small className={twMerge("hover:bg-slate-100 cursor-pointer w-full", isSelected ? "bg-slate-100" : "")}>Hair Length</small>
-        }
-        }>
-            <input type="button" value="short" onClick={handleClick}/>
+        <Attribute name="hair length" menuDisplay={menuDisplay}>
+            <h1>Hair Length</h1>
+            <div className="flex justify-center ">
+                <input type="button" value="short" onClick={setValue("short")} className="hover:bg-slate-200 cursor-pointer px-2"/>
+                <input type="button" value="medium" onClick={setValue("medium")} className="hover:bg-slate-200 cursor-pointer px-2"/>
+                <input type="button" value="long" onClick={setValue("long")} className="hover:bg-slate-200 cursor-pointer px-2"/>
+            </div>
         </Attribute>
     )
 }
@@ -69,6 +80,18 @@ const GenderAttribute = () => {
         }}>
             <input type="button" value="Male" onClick={handleClick}/>
         </Attribute>
+    )
+}
+
+const AttributeBar = () => {
+    const { attribute } = requireContext(RichInputContext);
+
+    return (
+        <div className="flex">
+            { attribute.current.map((attribute) => {
+                return <div className="text-[8px] text-nowrap bg-blue-300 rounded px-1">{attribute.key}:{attribute.value}</div>
+            })}
+        </div>
     )
 }
 

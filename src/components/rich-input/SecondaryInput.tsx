@@ -11,16 +11,15 @@ interface AttributeDisplayProps {
 
 /** Handles the rendering of the input when inputing attributes */
 export const SecondaryInput: React.FC<AttributeDisplayProps> = (props) => {
-    const { cursor, state }= requireContext(RichInputContext);
+    const { cursor, state, secondaryInput, setSecondaryInput }= requireContext(RichInputContext);
     const [ id ] = useState<string>(createUID());
-    const [ text, setText ] = useState<string>("");
 
     useEffect(() => {
         state.setId("secondary", id);
     }, []);
 
     useEffect(() => {
-        setText("");
+        setSecondaryInput("");
     }, [state.current]);
 
     const handleKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
@@ -34,14 +33,20 @@ export const SecondaryInput: React.FC<AttributeDisplayProps> = (props) => {
         }
 
         if (evt.key == "Backspace" && (evt.target as HTMLInputElement).value.length == 0) {
-            state.setState("primary");
+            if (state.current == "menu") {
+                state.setState("secondary");
+                //extra space to prevent backspace from clipping of end of attribute name
+                setSecondaryInput(cursor.current.name + " ");
+            } else {
+                state.setState("primary");
+            }
         }
 
         if (evt.key == "Enter") state.setState("menu");
     }
 
     const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        setText(evt.target.value);
+        setSecondaryInput(evt.target.value);
     }
 
     const handleFocus = () => {
@@ -69,7 +74,7 @@ export const SecondaryInput: React.FC<AttributeDisplayProps> = (props) => {
         <div className={`${shouldBeHidden() ? "border-0 w-0 px-0 overflow-hidden " : twMerge("flex pl-[6px] pr-1",props.className)}`}>
             <p className="-translate-y-[2px] text-nowrap">/{getAttribute()}</p>
             <ResizeableInput id={id} className="border-none p-0 "
-            onChange={handleChange} value={text} onKeyDown={handleKeyDown} onBlur={handleBlur} onFocus={handleFocus}/>
+            onChange={handleChange} value={secondaryInput} onKeyDown={handleKeyDown} onBlur={handleBlur} onFocus={handleFocus}/>
         </div>
     )
 }
