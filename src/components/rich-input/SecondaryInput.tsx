@@ -5,12 +5,10 @@ import { createUID } from "../../utilities/createUID";
 import ResizeableInput from "../ResizbleInput/ResizeableInput";
 import { twMerge } from "tailwind-merge";
 
-interface AttributeDisplayProps {
-    className?: string
-}
+type SecondaryInputProps = React.HTMLAttributes<HTMLDivElement> & {}
 
 /** Handles the rendering of the input when inputing attributes */
-export const SecondaryInput: React.FC<AttributeDisplayProps> = (props) => {
+export const SecondaryInput: React.FC<SecondaryInputProps> = ({className, ...props}) => {
     const { cursor, state, secondaryInput, setSecondaryInput }= requireContext(RichInputContext);
     const [ id ] = useState<string>(createUID());
 
@@ -71,9 +69,9 @@ export const SecondaryInput: React.FC<AttributeDisplayProps> = (props) => {
     }
 
     return (
-        <div className={`${shouldBeHidden() ? "border-0 w-0 px-0 overflow-hidden " : twMerge("flex pl-[6px] pr-1",props.className)}`}>
+        <div className={`${shouldBeHidden() ? "border-0 w-0 px-0 overflow-hidden " : twMerge("flex pl-[6px] pr-1", className)}`}>
             <p className="-translate-y-[2px] text-nowrap">/{getAttribute()}</p>
-            <ResizeableInput id={id} className="border-none p-0 "
+            <ResizeableInput id={id} className="border-none p-0" {...props}
             onChange={handleChange} value={secondaryInput} onKeyDown={handleKeyDown} onBlur={handleBlur} onFocus={handleFocus}/>
         </div>
     )

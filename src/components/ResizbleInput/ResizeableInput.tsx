@@ -21,12 +21,9 @@ const ResizeableInput = forwardRef<HTMLInputElement, InputProps>(({ style, class
     }
 
     const calculateWidth = () => {
-
         if (!spanRef.current) return 4.3;
 
         spanRef.current.innerHTML = value as string ?? defaultValue;
-
-        console.log(spanRef.current.getBoundingClientRect().width);
         
         return spanRef.current.getBoundingClientRect().width + 4.3;
     }
