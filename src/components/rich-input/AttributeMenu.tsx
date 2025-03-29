@@ -22,7 +22,7 @@ const AttributeMenu: React.FC<AttributeMenuProps> = ({className, ...props}) => {
     }
 
     return (
-        <BoundingBox isActive={!isHidden} id={id} className={twMerge(isHidden ? "hidden border-none" : "", className)} 
+        <BoundingBox isActive={!isHidden} id={id} className={twMerge(isHidden ? "border-none h-0 overflow-hidden" : "", className)} 
         {...props} onOutOfBound={changeState}>
             {props.children}   
         </BoundingBox>

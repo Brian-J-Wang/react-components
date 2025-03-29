@@ -7,11 +7,15 @@ import Attribute from "../components/rich-input/Attribute";
 import { twMerge } from "tailwind-merge";
 import requireContext from "../utilities/requireContext";
 import Submit from "../components/rich-input/Submit";
+import ShowOnFilter from "../components/rich-input/ShowOnFilter";
 
 const Component = () => {
     return (
-        <RichInput onSubmit={() => {}}>
+        <RichInput onSubmit={() => Promise.resolve()}>
             <AttributeMenu className="border border-neutral-300 rounded mb-1 flex flex-col">
+                <ShowOnFilter>
+                    <h3>Select Attribute:</h3>
+                </ShowOnFilter>
                 <HairLengthAttribute/>
                 <BreedAttribute/>
                 <GenderAttribute/>

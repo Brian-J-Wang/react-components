@@ -47,7 +47,7 @@ export const RichInputContext = createContext<RichInputContextProps>({
 interface RichInputProps {
     className?: string
     children: ReactNode,
-    onSubmit: (submission: SubmissionItem) => void,
+    onSubmit: (submission: SubmissionItem) => Promise<void>,
 }
 
 /**
@@ -77,18 +77,21 @@ const RichInput: React.FC<RichInputProps> = (props) => {
         props.onSubmit({
             input: primaryInput,
             attributes: attribute.current
+        }).then(() => {
+            setPrimaryInput("");
+            attribute.clear();
+        }).catch(() => {
+            //prevents the input from reseting 
         })
-
-        setPrimaryInput("");
-        attribute.clear();
     }
 
     const setSecondaryInput = (input: string) => {
         cursor.attributes.forEach((attribute) => {
+            console.log(attribute.name.slice(0, input.length) == input);
             if (attribute.name.slice(0, input.length) == input) {
-                attribute.hidden = true
-            } else {
                 attribute.hidden = false
+            } else {
+                attribute.hidden = true
             }
         })
         _setSecondaryInput(input);

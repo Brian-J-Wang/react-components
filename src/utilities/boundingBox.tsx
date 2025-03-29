@@ -1,8 +1,7 @@
-import { ReactNode, RefObject, useEffect, useRef } from "react"
+import { RefObject, useEffect, useRef } from "react"
 import { Position } from "./position";
 
 type BoundingBoxProps = React.HTMLAttributes<HTMLDivElement> &{
-    children: ReactNode,
     /** should the listeners fire? */
     isActive: boolean,
     /** fired when mouse clicks within the bounding box */
@@ -16,7 +15,7 @@ export type OutofBoundsHandle = {
 }
 
 /** An HTML div element with attached listeners that fires when a mouse a mouse click occurs */
-const BoundingBox: React.FC<BoundingBoxProps> = (props) => {
+const BoundingBox: React.FC<BoundingBoxProps> = ({isActive, onBound, onOutOfBound, ...props}) => {
     const boundingDiv = useRef<HTMLDivElement>(null) as RefObject<HTMLDivElement>;
 
     useEffect(() => {
@@ -28,21 +27,19 @@ const BoundingBox: React.FC<BoundingBoxProps> = (props) => {
     }, []);
 
     function handleMouseDown(evt: MouseEvent) {
-        if (!props.isActive || evt.button != 0) {
+        if (!isActive || evt.button != 0) {
             return;
         }
 
         const clientRect = getBounds();
 
-        console.log(clientRect);
-
         if (clientRect && withinBounds(clientRect, {
             x: evt.clientX,
             y: evt.clientY
         })) {
-            props.onBound && props.onBound(evt);
+            onBound && onBound(evt);
         } else {
-            props.onOutOfBound && props.onOutOfBound(evt);
+            onOutOfBound && onOutOfBound(evt);
         }
 
         function getBounds() {
