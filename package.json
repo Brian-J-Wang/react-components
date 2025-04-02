@@ -1,9 +1,10 @@
 {
   "name": "@brwwang/react-components",
   "private": false,
-  "version": "0.0.7",
+  "version": "0.0.9",
   "type": "module",
-  "main": "dist/main.js",
+  "main": "dist/react-components.js",
+  "types": "dist/main.d.ts",
   "files": [
     "dist"
   ],
