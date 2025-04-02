@@ -1,5 +1,5 @@
 import { ReactNode } from "react"
-import requireContext from "../../utilities/requireContext"
+import requireContext from "../utilities/requireContext"
 import { RichInputContext } from "./RichInput"
 
 type ShowOnFilterProps = {

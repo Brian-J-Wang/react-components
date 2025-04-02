@@ -1,9 +1,9 @@
 import { twMerge } from "tailwind-merge";
-import requireContext from "../../utilities/requireContext";
+import requireContext from "../utilities/requireContext";
 import { RichInputContext } from "./RichInput";
-import { createUID } from "../../utilities/createUID";
+import { createUID } from "../utilities/createUID";
 import { useEffect, useState } from "react";
-import BoundingBox from "../../utilities/boundingBox";
+import BoundingBox from "../utilities/boundingBox";
 
 type AttributeMenuProps = React.HTMLAttributes<HTMLDivElement> & { }
 

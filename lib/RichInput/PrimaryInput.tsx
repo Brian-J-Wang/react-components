@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { createUID } from "../../utilities/createUID";
-import requireContext from "../../utilities/requireContext";
+import { createUID } from "../utilities/createUID";
+import requireContext from "../utilities/requireContext";
 import { RichInputContext } from "./RichInput";
 import { twMerge } from "tailwind-merge";
 

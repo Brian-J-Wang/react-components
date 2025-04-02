@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import requireContext from "../../utilities/requireContext"
+import requireContext from "../utilities/requireContext"
 import { RichInputContext } from "./RichInput";
-import { createUID } from "../../utilities/createUID";
+import { createUID } from "../utilities/createUID";
 import ResizeableInput from "../ResizbleInput/ResizeableInput";
 import { twMerge } from "tailwind-merge";
 

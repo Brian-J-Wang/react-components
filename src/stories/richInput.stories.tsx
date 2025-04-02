@@ -8,7 +8,7 @@ import PrimaryInput from "../components/rich-input/PrimaryInput";
 import SecondaryInput from "../components/rich-input/SecondaryInput";
 import AttributeMenu from "../components/rich-input/AttributeMenu";
 import Attribute from "../components/rich-input/Attribute";
-import requireContext from "../utilities/requireContext";
+import requireContext from "../../lib/utilities/requireContext";
 import Submit from "../components/rich-input/Submit";
 import ShowOnFilter from "../components/rich-input/ShowOnFilter";
 

@@ -1,4 +1,4 @@
-import requireContext from "../../utilities/requireContext"
+import requireContext from "../utilities/requireContext"
 import { RichInputContext } from "./RichInput"
 
 type SubmitProps = React.HTMLAttributes<HTMLButtonElement> & { }
