@@ -1,2 +1,2 @@
 export * from "./RichInput";
-export * from "./ResizbleInput"
+export * from "./ResizbleInput";
