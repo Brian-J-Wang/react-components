@@ -58,7 +58,7 @@ interface RichInputProps {
  * @param selectingValue user is setting the value for their attribute.
  */
 
-const RichInput: React.FC<RichInputProps> = (props) => {
+export const RichInput: React.FC<RichInputProps> = (props) => {
     const state = useComponentState();
     const cursor = useCursor();
     const attribute = useAttributes();
@@ -108,5 +108,3 @@ const RichInput: React.FC<RichInputProps> = (props) => {
         </RichInputContext.Provider>
     )
 }
-
-export default RichInput;
