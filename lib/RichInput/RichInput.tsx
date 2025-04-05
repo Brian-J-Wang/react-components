@@ -23,26 +23,7 @@ type SubmissionItem = {
     }[]
 }
 
-export const RichInputContext = createContext<RichInputContextProps>({
-    //@ts-ignore
-    cursor: {
-
-    },
-    //@ts-ignore
-    state: {
-
-    },
-    //@ts-ignore
-    attribute: {
-        
-    },
-    setAttributeValue: () => {},
-    primaryInput: "",
-    setPrimaryInput: () => {},
-    secondaryInput: "",
-    setSecondaryInput: () => {},
-    submit: () => {}
-});
+export const RichInputContext = createContext<RichInputContextProps | undefined>(undefined);
 
 interface RichInputProps {
     className?: string

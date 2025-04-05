@@ -9,7 +9,7 @@ type SecondaryInputProps = React.HTMLAttributes<HTMLDivElement> & {}
 
 /** Handles the rendering of the input when inputing attributes */
 export const SecondaryInput: React.FC<SecondaryInputProps> = ({className, ...props}) => {
-    const { cursor, state, secondaryInput, setSecondaryInput }= requireContext(RichInputContext);
+    const { cursor, state, secondaryInput, setSecondaryInput } = requireContext(RichInputContext);
     const [ id ] = useState<string>(createUID());
 
     useEffect(() => {
