@@ -1,4 +1,4 @@
-export { default as RichInput, RichInputContext } from "./RichInput";
+export { default, RichInputContext } from "./RichInput";
 export { default as AttributeMenu } from "./AttributeMenu";
 export { default as Attribute } from "./Attribute";
 export { default as PrimaryInput } from "./PrimaryInput";
