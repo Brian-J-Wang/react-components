@@ -20,7 +20,7 @@ const Attribute: React.FC<AttributeProps> = ({ onClick, onMouseEnter, ...props})
         return () => {
             cursor.removeFromList(props.name);
         }
-    }, [] );
+    }, []);
     
     const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         cursor.jumpToAttribute(props.name);

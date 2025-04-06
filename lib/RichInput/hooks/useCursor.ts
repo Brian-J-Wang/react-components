@@ -37,6 +37,13 @@ export default function useCursor() {
         }
     }
 
+    useEffect(() => {
+        //clears the attributes if this ever gets unmounted.
+        return () => {
+            attributes.current = [];
+        }
+    }, [])
+
     const removeFromList = (name: string) => {
         let removedIndex = -1;
         attributes.current.filter((value, index) => {
