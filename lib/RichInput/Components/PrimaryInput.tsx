@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { createUID } from "../utilities/createUID";
-import requireContext from "../utilities/requireContext";
+import { createUID } from "../../utilities/createUID";
+import requireContext from "../../utilities/requireContext";
 import { RichInputContext } from "./RichInput";
-import { twMerge } from "tailwind-merge";
+
+import "../styles/PrimaryInput.module.css";
 
 type RichInputInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 }
@@ -43,7 +44,7 @@ const PrimaryInput: React.FC<RichInputInputProps> = ({className, placeholder, ..
     }
 
     return (
-        <input id={id} value={primaryInput} onKeyDown={handleKeyDown} onChange={handleChange} className={twMerge('w-full', className)} 
+        <input id={id} value={primaryInput} onKeyDown={handleKeyDown} onChange={handleChange} className={`primary-input ${className}`} 
         placeholder={_placeholder()} 
         onFocus={handleFocus} {...props}/>
     )

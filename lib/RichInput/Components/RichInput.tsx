@@ -1,7 +1,7 @@
 import { createContext, ReactNode, useState } from "react";
-import useCursor, { CursorController } from "./hooks/useCursor";
-import useComponentState, { StateController } from "./hooks/useComponentState";
-import useAttributes, { AttributesController } from "./hooks/useAttributes";
+import useCursor, { CursorController } from "../Hooks/useCursor";
+import useComponentState, { StateController } from "../Hooks/useComponentState";
+import useAttributes, { AttributesController } from "../Hooks/useAttributes";
 
 interface RichInputContextProps {
     cursor: CursorController,

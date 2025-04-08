@@ -1,8 +1,8 @@
-export * from "./RichInput";
-export { default as AttributeMenu } from "./AttributeMenu";
-export { default as Attribute } from "./Attribute";
-export { default as PrimaryInput } from "./PrimaryInput";
-export { default as SecondaryInput } from "./SecondaryInput";
-export { default as ShowOnFilter } from "./ShowOnFilter";
-export { default as Submit } from "./Submit";
-export * from "./hooks";
+export * from "./Components/RichInput";
+export { default as AttributeMenu } from "./Components/AttributeMenu";
+export { default as Attribute } from "./Components/Attribute";
+export { default as PrimaryInput } from "./Components/PrimaryInput";
+export { default as SecondaryInput } from "./Components/SecondaryInput";
+export { default as ShowOnFilter } from "./Components/ShowOnFilter";
+export { default as Submit } from "./Components/Submit";
+export * from "./Hooks";

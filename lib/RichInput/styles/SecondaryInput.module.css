@@ -1,0 +1,31 @@
+.secondary-input {
+    display: flex;
+    text-wrap: nowrap;
+    padding-left: 6px;
+    padding-right: 1px;
+    outline: none;
+    background-color: lightgray;
+}
+
+.secondary-input__hidden {
+    border: none;
+    width: 0px;
+    overflow: hidden;
+    padding: 0px;
+}
+
+.secondary-input__span {
+    text-wrap: nowrap;
+    transform: translateY(-3px);
+    margin-right: 1px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.secondary-input__input {
+    padding: 0px 2px 0px 0px;
+    outline: none;
+    vertical-align: baseline;
+    line-height: 8px;
+}
+

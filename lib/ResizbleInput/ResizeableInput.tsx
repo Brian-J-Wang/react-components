@@ -1,7 +1,6 @@
 import { useState, forwardRef, useRef, RefObject } from "react";
 
-import "./ResizeableInput.css"
-import { twMerge } from "tailwind-merge";
+import styles from "./ResizeableInput.module.css"
 
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
     onInputChange?: (evt: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<string>>) => void;
@@ -30,8 +29,8 @@ const ResizeableInput = forwardRef<HTMLInputElement, InputProps>(({ style, class
 
     return (
         <>
-            <span ref={spanRef} className={`resizeable__span pointer-events-none absolute ${className}`}></span>
-            <input style={{ ...style, width: calculateWidth()}} className={twMerge("box-content outline-none border-[1px] rounded pl-2 pr-2 bg-opacity-0 bg-white", className)} 
+            <span ref={spanRef} className={`${styles.resizeable__span} ${className}`}></span>
+            <input style={{ ...style, width: calculateWidth()}} className={`${styles.resizeable__input} ${className}`} 
             ref={ref} onChange={handleChange} value={value ?? defaultValue} onBlur={onBlur} {...props}/>
         </>
     )

@@ -1,9 +1,10 @@
-import { twMerge } from "tailwind-merge";
-import requireContext from "../utilities/requireContext";
+import requireContext from "../../utilities/requireContext";
 import { RichInputContext } from "./RichInput";
-import { createUID } from "../utilities/createUID";
+import { createUID } from "../../utilities/createUID";
 import { useEffect, useState } from "react";
-import BoundingBox from "../utilities/boundingBox";
+import BoundingBox from "../../utilities/boundingBox";
+
+import "../styles/AttributeMenu.module.css"
 
 type AttributeMenuProps = React.HTMLAttributes<HTMLDivElement> & { }
 
@@ -22,7 +23,7 @@ const AttributeMenu: React.FC<AttributeMenuProps> = ({className, ...props}) => {
     }
 
     return (
-        <BoundingBox isActive={!isHidden} id={id} className={twMerge(isHidden ? "border-none h-0 overflow-hidden" : "", className)} 
+        <BoundingBox isActive={!isHidden} id={id} className={`${isHidden ? "attribute-menu__hidden" : ""} ${className}`} 
         {...props} onOutOfBound={changeState}>
             {props.children}   
         </BoundingBox>

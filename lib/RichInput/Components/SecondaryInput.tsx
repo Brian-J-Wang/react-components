@@ -1,9 +1,10 @@
 import { useEffect, useState } from "react";
-import requireContext from "../utilities/requireContext"
+import requireContext from "../../utilities/requireContext"
 import { RichInputContext } from "./RichInput";
-import { createUID } from "../utilities/createUID";
-import ResizeableInput from "../ResizbleInput/ResizeableInput";
-import { twMerge } from "tailwind-merge";
+import { createUID } from "../../utilities/createUID";
+import ResizeableInput from "../../ResizbleInput/ResizeableInput";
+
+import styles from "../styles/SecondaryInput.module.css";
 
 type SecondaryInputProps = React.HTMLAttributes<HTMLDivElement> & {}
 
@@ -69,9 +70,9 @@ export const SecondaryInput: React.FC<SecondaryInputProps> = ({className, ...pro
     }
 
     return (
-        <div className={`${shouldBeHidden() ? "border-0 w-0 px-0 overflow-hidden " : twMerge("flex pl-[6px] pr-1", className)}`}>
-            <p className="-translate-y-[2px] text-nowrap">/{getAttribute()}</p>
-            <ResizeableInput id={id} className="border-none p-0" {...props}
+        <div className={`${shouldBeHidden() ? styles['secondary-input__hidden'] : `${styles['secondary-input']} ${className}`}`}>
+            <p className={styles['secondary-input__span']}>/{getAttribute()}</p>
+            <ResizeableInput id={id} className={styles['secondary-input__input']} {...props}
             onChange={handleChange} value={secondaryInput} onKeyDown={handleKeyDown} onBlur={handleBlur} onFocus={handleFocus}/>
         </div>
     )
