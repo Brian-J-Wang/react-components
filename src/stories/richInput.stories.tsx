@@ -1,16 +1,10 @@
+import React from "react";
 import { Meta, StoryObj } from "@storybook/react"
 import { twMerge } from "tailwind-merge";
 import { within, userEvent } from "@storybook/testing-library";
 import {expect} from "@storybook/jest";
-
-import RichInput, { RichInputContext } from "../components/rich-input/RichInput";
-import PrimaryInput from "../components/rich-input/PrimaryInput";
-import SecondaryInput from "../components/rich-input/SecondaryInput";
-import AttributeMenu from "../components/rich-input/AttributeMenu";
-import Attribute from "../components/rich-input/Attribute";
+import { Attribute, AttributeMenu, PrimaryInput, RichInput, RichInputContext, SecondaryInput, ShowOnFilter, Submit } from "../../lib/RichInput";
 import requireContext from "../../lib/utilities/requireContext";
-import Submit from "../components/rich-input/Submit";
-import ShowOnFilter from "../components/rich-input/ShowOnFilter";
 
 const Component = () => {
     return (
@@ -23,7 +17,7 @@ const Component = () => {
                 <BreedAttribute />
                 <GenderAttribute />
             </AttributeMenu>
-            <div className="flex flex-row items-center w-full pl-[2px] h-6 text-sm font-semibold border-[1px] border-neutral-300 rounded">
+            <div className="">
                 <SecondaryInput className={"bg-blue-300 text-[10px] h-4 rounded-[10px]"} data-testid="secondary-input"/>
                 <PrimaryInput className="outline-none " placeholder="Enter name, or type '/' to filter by attributes" />
                 <Submit className="px-2 bg-blue-200">
