@@ -17,9 +17,9 @@ const Component = () => {
                 <BreedAttribute />
                 <GenderAttribute />
             </AttributeMenu>
-            <div className="">
+            <div className="flex w-full h-6">
                 <SecondaryInput className={"bg-blue-300 text-[10px] h-4 rounded-[10px]"} data-testid="secondary-input"/>
-                <PrimaryInput className="outline-none " placeholder="Enter name, or type '/' to filter by attributes" />
+                <PrimaryInput className="outline-none w-full" placeholder="Enter name, or type '/' to filter by attributes" />
                 <Submit className="px-2 bg-blue-200">
                     Submit
                 </Submit>
@@ -105,7 +105,7 @@ const meta = {
     },
     decorators: [
         (Story) => (
-            <div className="w-[480px] h-[240px] flex flex-col justify-end">
+            <div className="w-[520px] h-[240px] flex flex-col justify-end">
                 <Story/>
             </div>
         )

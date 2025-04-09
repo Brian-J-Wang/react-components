@@ -4,7 +4,7 @@ import { createUID } from "../../utilities/createUID";
 import { useEffect, useState } from "react";
 import BoundingBox from "../../utilities/boundingBox";
 
-import "../styles/AttributeMenu.module.css"
+import styles from "../styles/AttributeMenu.module.css"
 
 type AttributeMenuProps = React.HTMLAttributes<HTMLDivElement> & { }
 
@@ -23,7 +23,7 @@ const AttributeMenu: React.FC<AttributeMenuProps> = ({className, ...props}) => {
     }
 
     return (
-        <BoundingBox isActive={!isHidden} id={id} className={`${isHidden ? "attribute-menu__hidden" : ""} ${className}`} 
+        <BoundingBox isActive={!isHidden} id={id} className={`${isHidden ? styles.menu__hidden : className}`} 
         {...props} onOutOfBound={changeState}>
             {props.children}   
         </BoundingBox>
