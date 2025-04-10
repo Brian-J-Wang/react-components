@@ -1,7 +1,7 @@
 {
   "name": "@brwwang/react-components",
   "private": false,
-  "version": "0.0.20",
+  "version": "0.0.21",
   "type": "module",
   "main": "dist/react-components.js",
   "types": "dist/main.d.ts",
@@ -17,7 +17,6 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@storybook/addon-postcss": "^2.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },
