@@ -3,19 +3,19 @@ import { Meta, StoryObj } from "@storybook/react"
 import { within, userEvent } from "@storybook/testing-library";
 import {expect} from "@storybook/jest";
 
-import CompositeComponent from "./richInput";
-
+import styles from "./richInput.module.css";
+import RichInputMinimalStyling from "./richInput";
 
 const meta = {
-    title: 'Components/RichInput',
-    component: CompositeComponent,
+    title: 'Components/Rich Input',
+    component: RichInputMinimalStyling,
     args: {},
     parameters: {
         layout: "centered"
     },
     decorators: [
         (Story) => (
-            <div className="">
+            <div className={styles.decorator}>
                 <Story/>
             </div>
         )
@@ -25,7 +25,7 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>
 
-export const Render: Story = {};
+export const MinimalStyling: Story = {};
 
 export const SecondaryInputOpened: Story = {
     play: async ({ canvasElement }) => {

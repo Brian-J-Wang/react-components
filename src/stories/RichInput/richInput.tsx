@@ -1,31 +1,9 @@
 import React from "react";
 import requireContext from "../../../lib/utilities/requireContext";
-import { twMerge } from "tailwind-merge";
 import { Attribute, AttributeMenu, PrimaryInput, RichInput, RichInputContext, SecondaryInput, ShowOnFilter, Submit } from "../../../lib/RichInput";
+
 import styles from "./richInput.module.css";
 
-const CompositeComponent = () => {
-    return (
-        <RichInput onSubmit={() => Promise.resolve()}>
-            <AttributeMenu className="border border-neutral-300 rounded mb-1 flex flex-col">
-                <ShowOnFilter>
-                    <h3>Select Attribute:</h3>
-                </ShowOnFilter>
-                <HairLengthAttribute />
-                <BreedAttribute />
-                <GenderAttribute />
-            </AttributeMenu>
-            <div className="flex w-full h-6 bg-red-200">
-                <SecondaryInput className={"bg-blue-300 text-[10px] h-4 rounded-[10px]"} data-testid="secondary-input"/>
-                <PrimaryInput className="outline-none w-full" placeholder="Enter name, or type '/' to filter by attributes" />
-                <Submit className="px-2 bg-blue-200">
-                    Submit
-                </Submit>
-            </div>
-            <AttributeBar/>
-        </RichInput>
-    )
-}
 
 const HairLengthAttribute = () => {
     const { setAttributeValue } = requireContext(RichInputContext);
@@ -34,12 +12,12 @@ const HairLengthAttribute = () => {
         setAttributeValue(value);
     }
 
-    const menuDisplay = (isSelected: boolean) => {
-        return <small className={twMerge("hover:bg-slate-100 cursor-pointer w-full", isSelected ? "bg-slate-100" : "")}>Hair Length</small>
+    const filterDisplay = (isSelected: boolean) => {
+        return <small className={isSelected ? styles.attributeSelected : styles.attribute}>Hair Length</small>
     }
 
     return (
-        <Attribute name="hair length" filterDisplay={menuDisplay} data-testid="attribute-1">
+        <Attribute name="hair length" filterDisplay={filterDisplay} data-testid="attribute-1">
             <h1>Hair Length</h1>
             <div className="flex justify-center ">
                 <input type="button" value="short" onClick={setValue("short")} className="hover:bg-slate-200 cursor-pointer px-2"/>
@@ -59,7 +37,7 @@ const BreedAttribute = () => {
 
     return (
         <Attribute name="breed" filterDisplay={(isSelected) => {
-            return <small className={twMerge("hover:bg-slate-100 cursor-pointer w-full", isSelected ? "bg-slate-100" : "")}>Cat Breed</small>
+            return <small className={isSelected ? styles.attributeSelected : styles.attribute}>Cat Breed</small>
         }} data-testid="attribute-2">
             <input type="button" value="Maine Coon" onClick={handleClick}/>
         </Attribute>
@@ -75,7 +53,7 @@ const GenderAttribute = () => {
 
     return (
         <Attribute name="gender" filterDisplay={(isSelected) => {
-            return <small className={twMerge("hover:bg-slate-100 cursor-pointer w-full", isSelected ? "bg-slate-100" : "")}>Gender</small>
+            return <small className={isSelected ? styles.attributeSelected : styles.attribute}>Gender</small>
         }} data-testid="attribute-3">
             <input type="button" value="Male" onClick={handleClick}/>
         </Attribute>
@@ -94,4 +72,28 @@ const AttributeBar = () => {
     )
 }
 
-export default CompositeComponent;
+export const RichInputMinimalStyling = () => {
+    return (
+        <RichInput onSubmit={() => Promise.resolve()}>
+            <AttributeMenu className={styles.attributeMenu}>
+                <ShowOnFilter>
+                    <h3 className={styles.attributeMenuTitle}>Select Attribute:</h3>
+                </ShowOnFilter>
+                <HairLengthAttribute />
+                <BreedAttribute />
+                <GenderAttribute />
+            </AttributeMenu>
+            <div className={styles.inputBox}>
+                <SecondaryInput className={styles.secondaryInput} data-testid="secondary-input"/>
+                <PrimaryInput className={styles.primaryInput} placeholder="Enter name, or type '/' to filter by attributes" />
+                <Submit className="px-2 bg-blue-200">
+                    Submit
+                </Submit>
+            </div>
+            <AttributeBar/>
+        </RichInput>
+    )
+}
+
+
+export default RichInputMinimalStyling;
