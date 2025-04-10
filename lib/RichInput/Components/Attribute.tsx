@@ -11,7 +11,7 @@ type AttributeProps = React.HTMLAttributes<HTMLDivElement> & {
  *  Children will be shown if selected and inputState is "selectingValue".
  *  The menuDisplay component will be shown if inputState is "filteringAttribute".
 */
-const Attribute: React.FC<AttributeProps> = ({ onClick, onMouseEnter, ...props}) => {
+const Attribute: React.FC<AttributeProps> = ({ onClick, onMouseEnter, filterDisplay, ...props}) => {
     const { cursor, state } = requireContext(RichInputContext);
 
     useEffect(() => {
@@ -38,7 +38,7 @@ const Attribute: React.FC<AttributeProps> = ({ onClick, onMouseEnter, ...props})
     if (state.current == "secondary" && !isHidden) {
         return (
             <div className="flex" onClick={handleClick} onMouseEnter={handleMouseEnter} {...props}>
-                {props.filterDisplay(isSelected)}
+                {filterDisplay(isSelected)}
             </div>
         )
     } else if (state.current == "menu" && isSelected) {

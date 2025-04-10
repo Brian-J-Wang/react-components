@@ -1,0 +1,56 @@
+import React from "react";
+import { Meta, StoryObj } from "@storybook/react"
+import { within, userEvent } from "@storybook/testing-library";
+import {expect} from "@storybook/jest";
+
+import CompositeComponent from "./richInput";
+
+
+const meta = {
+    title: 'Components/RichInput',
+    component: CompositeComponent,
+    args: {},
+    parameters: {
+        layout: "centered"
+    },
+    decorators: [
+        (Story) => (
+            <div className="">
+                <Story/>
+            </div>
+        )
+    ]
+} satisfies Meta
+
+export default meta;
+type Story = StoryObj<typeof meta>
+
+export const Render: Story = {};
+
+export const SecondaryInputOpened: Story = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        await userEvent.click(canvas.getByPlaceholderText("Enter name, or type '/' to filter by attributes"));
+
+        await userEvent.keyboard("/");
+
+        expect(canvas.getByText("Select Attribute:")).toBeInTheDocument();
+
+        expect(canvas.getByTestId("secondary-input")).toBeVisible();
+    }
+}
+
+export const SecondaryInputOpenAndKeyboardTyped: Story = {
+    play: async ({ canvasElement }) => {
+        const canvas = within(canvasElement);
+
+        await userEvent.click(canvas.getByPlaceholderText("Enter name, or type '/' to filter by attributes"));
+        await userEvent.keyboard("/");
+        await userEvent.keyboard("bre");
+
+        expect(canvas.queryByTestId("attribute-1")).toBeNull();
+        expect(canvas.queryByTestId("attribute-2")).toBeInTheDocument();
+        expect(canvas.queryByTestId("attribute-3")).toBeNull();
+    }
+}

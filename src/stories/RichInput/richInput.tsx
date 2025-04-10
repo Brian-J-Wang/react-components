@@ -1,12 +1,10 @@
 import React from "react";
-import { Meta, StoryObj } from "@storybook/react"
+import requireContext from "../../../lib/utilities/requireContext";
 import { twMerge } from "tailwind-merge";
-import { within, userEvent } from "@storybook/testing-library";
-import {expect} from "@storybook/jest";
-import { Attribute, AttributeMenu, PrimaryInput, RichInput, RichInputContext, SecondaryInput, ShowOnFilter, Submit } from "../../lib/RichInput";
-import requireContext from "../../lib/utilities/requireContext";
+import { Attribute, AttributeMenu, PrimaryInput, RichInput, RichInputContext, SecondaryInput, ShowOnFilter, Submit } from "../../../lib/RichInput";
+import styles from "./richInput.module.css";
 
-const Component = () => {
+const CompositeComponent = () => {
     return (
         <RichInput onSubmit={() => Promise.resolve()}>
             <AttributeMenu className="border border-neutral-300 rounded mb-1 flex flex-col">
@@ -17,7 +15,7 @@ const Component = () => {
                 <BreedAttribute />
                 <GenderAttribute />
             </AttributeMenu>
-            <div className="flex w-full h-6">
+            <div className="flex w-full h-6 bg-red-200">
                 <SecondaryInput className={"bg-blue-300 text-[10px] h-4 rounded-[10px]"} data-testid="secondary-input"/>
                 <PrimaryInput className="outline-none w-full" placeholder="Enter name, or type '/' to filter by attributes" />
                 <Submit className="px-2 bg-blue-200">
@@ -90,57 +88,10 @@ const AttributeBar = () => {
     return (
         <div className="flex">
             { attribute.current.map((attribute) => {
-                return <div className="text-[8px] text-nowrap bg-blue-300 rounded px-1">{attribute.key}:{attribute.value}</div>
+                return <div className="sty">{attribute.key}:{attribute.value}</div>
             })}
         </div>
     )
 }
 
-const meta = {
-    title: 'Components/RichInput',
-    component: Component,
-    args: {},
-    parameters: {
-        layout: "centered"
-    },
-    decorators: [
-        (Story) => (
-            <div className="w-[520px] h-[240px] flex flex-col justify-end">
-                <Story/>
-            </div>
-        )
-    ]
-} satisfies Meta
-
-export default meta;
-type Story = StoryObj<typeof meta>
-
-export const Render: Story = {};
-
-export const SecondaryInputOpened: Story = {
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-
-        await userEvent.click(canvas.getByPlaceholderText("Enter name, or type '/' to filter by attributes"));
-
-        await userEvent.keyboard("/");
-
-        expect(canvas.getByText("Select Attribute:")).toBeInTheDocument();
-
-        expect(canvas.getByTestId("secondary-input")).toBeVisible();
-    }
-}
-
-export const SecondaryInputOpenAndKeyboardTyped: Story = {
-    play: async ({ canvasElement }) => {
-        const canvas = within(canvasElement);
-
-        await userEvent.click(canvas.getByPlaceholderText("Enter name, or type '/' to filter by attributes"));
-        await userEvent.keyboard("/");
-        await userEvent.keyboard("bre");
-
-        expect(canvas.queryByTestId("attribute-1")).toBeNull();
-        expect(canvas.queryByTestId("attribute-2")).toBeInTheDocument();
-        expect(canvas.queryByTestId("attribute-3")).toBeNull();
-    }
-}
+export default CompositeComponent;
