@@ -15,7 +15,7 @@ interface RichInputContextProps {
     submit: () => void
 }
 
-type SubmissionItem = {
+export type SubmissionItem = {
     input: string,
     attributes: {
         key: string,
