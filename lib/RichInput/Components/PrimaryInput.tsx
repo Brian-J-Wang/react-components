@@ -9,7 +9,7 @@ type RichInputInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 }
 
 const PrimaryInput: React.FC<RichInputInputProps> = ({className, placeholder, ...props}) => {
-    const { state, primaryInput, setPrimaryInput } = requireContext(RichInputContext);
+    const { state, primaryInput, setPrimaryInput, submit } = requireContext(RichInputContext);
     const [ id ] = useState(createUID());
 
     useEffect(() => {
@@ -23,7 +23,7 @@ const PrimaryInput: React.FC<RichInputInputProps> = ({className, placeholder, ..
         }
 
         if (evt.key == "Enter") {
-            //submits the thing
+            submit();
         }
     }
 
