@@ -127,11 +127,7 @@ export default function useCursor() {
     const getAttribute = (name: string) => {
         return attributes.current.find((attribute) => attribute.name == name);
     }
-
-    useEffect(() => {
-        console.log(cursor);
-    }, [cursor]);
-
+    
     /** called whenever the content of the attributes has changed */
     const updateCursor = () => {
 
