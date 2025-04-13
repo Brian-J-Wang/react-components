@@ -67,15 +67,7 @@ export const RichInput: React.FC<RichInputProps> = (props) => {
     }
 
     const setSecondaryInput = (input: string) => {
-
-        cursor.attributes.forEach((attribute) => {
-            if (attribute.name.slice(0, input.length) == input) {
-                attribute.hidden = false
-            } else {
-                attribute.hidden = true
-            }
-        })
-        cursor.updateCursor();
+        cursor.filterAttribute(input);
         _setSecondaryInput(input);
     }
 

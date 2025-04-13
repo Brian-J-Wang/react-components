@@ -13,7 +13,9 @@ export type CursorController = {
     move: (direction: "up" | "down") => void,
     jumpToIndex: (index: number) => void,
     jumpToAttribute: (name: string) => void,
-    getAttribute: (name: string) => AttributeObj | undefined
+    getAttribute: (name: string) => AttributeObj | undefined,
+    /** Used to properly move the cursor when input changes */
+    filterAttribute: (value: string ) => void
 }
 
 export default function useCursor() {
@@ -42,7 +44,7 @@ export default function useCursor() {
         return () => {
             attributes.current = [];
         }
-    }, [])
+    }, []);
 
     const removeFromList = (name: string) => {
         let removedIndex = -1;
@@ -127,48 +129,59 @@ export default function useCursor() {
     const getAttribute = (name: string) => {
         return attributes.current.find((attribute) => attribute.name == name);
     }
-    
-    /** called whenever the content of the attributes has changed */
-    const updateCursor = () => {
 
-        //moves the cursor to the nearest non-hidden attribute if it's original value was -1;
-        if (cursor == -1) {
-            const newCursor = attributes.current.findIndex((attribute) => !attribute.hidden);
-            if (newCursor) setCursor(newCursor);
+    const filterAttribute = (input: string) => {
+        attributes.current.forEach((attribute) => {
+            attribute.hidden = attribute.name.slice(0, input.length) != input
+        })
+
+        moveToNearestVisible();
+    }
+
+    const moveToNearestVisible = () => {
+        if (cursor != -1 && !attributes.current[cursor].hidden) {
             return;
-        };
+        }
 
-        
-        //moves the cursor if the current focus item has been hidden to the nearest one.
-        if (attributes.current[cursor].hidden) {
-            let newCursor = -1;
-            const queue = [cursor + 1, cursor - 1];
-            const visited: number[] = [cursor];
+        const queue = [ cursor - 1, cursor + 1];
+        const visited = [ cursor ];
 
-            while (queue.length != 0) {
-                const current = queue.shift();
-                if (current == undefined) return;
-                if (current >= attributes.current.length || current < 0) continue;
-                if (attributes.current[current].hidden) {
-                    if (!visited.includes(current + 1) && !queue.includes(current + 1)) {
-                        queue.push(current + 1);
-                    }
-                    if (!visited.includes(current - 1) && !queue.includes(current - 1)) {
-                        queue.push(current - 1);
-                    }
-                    visited.push(current);
-                } else {
-                    newCursor = current;
-                    break;
-                }
+        if (cursor == -1) console.log(queue, visited);
+
+        while (true) {
+            const sample = queue.shift();
+            console.log(`testing: ${sample}`);
+
+            //we reached the end of all cursors and no visible attributes were found;
+            if (sample == undefined) {
+                setCursor( -1 );
+                return;
             }
 
-            setCursor(newCursor);
+            //out of bounds
+            if (!withinBounds(sample)) {
+                console.log(`${sample} is not within bounds`);
+                continue;
+            }
+
+            if (attributes.current[sample].hidden) {
+                console.log(`${sample} is hidden`);
+                if (!visited.includes(sample + 1) && !queue.includes(sample + 1)) {
+                    queue.push(sample + 1);
+                }
+                if (!visited.includes(sample - 1) && !queue.includes(sample - 1)) {
+                    queue.push(sample - 1);
+                }
+                visited.push(sample);
+            } else {
+                console.log(`${sample} is visible`);
+                setCursor( sample );
+                return;
+            }
         }
     }
 
     return {
-        updateCursor,
         attributes: attributes.current,
         addToList,
         removeFromList,
@@ -176,6 +189,7 @@ export default function useCursor() {
         move,
         jumpToIndex,
         jumpToAttribute,
-        getAttribute
+        getAttribute,
+        filterAttribute
     }
 }
