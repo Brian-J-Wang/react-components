@@ -28,7 +28,8 @@ export const SecondaryInput: React.FC<SecondaryInputProps> = ({className, ...pro
         
         if (evt.key == "ArrowUp" || evt.key == "ArrowDown") {
             evt.preventDefault();
-            cursor.move(evt.key == "ArrowUp" ? "up" : "down");
+
+            if (state.current == "secondary") cursor.move(evt.key == "ArrowUp" ? "up" : "down");
         }
 
         if (evt.key == "Backspace" && (evt.target as HTMLInputElement).value.length == 0) {
