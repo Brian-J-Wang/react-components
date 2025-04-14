@@ -18,11 +18,13 @@
 .secondary-input__span {
     text-wrap: nowrap;
     margin: 0px 0px 0px 1px;
+    font: inherit;
 }
 
 .secondary-input__input {
     padding: 0px 2px 0px 0px;
     outline: none;
     vertical-align: baseline;
+    font: inherit;
 }
 
