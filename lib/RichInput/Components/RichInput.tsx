@@ -67,8 +67,10 @@ export const RichInput: React.FC<RichInputProps> = (props) => {
     }
 
     const setSecondaryInput = (input: string) => {
-        cursor.filterAttribute(input);
         _setSecondaryInput(input);
+        if (state.current == "secondary") {
+            cursor.filterAttribute(input);
+        }
     }
 
     return (
