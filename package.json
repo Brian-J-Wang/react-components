@@ -15,7 +15,8 @@
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "publish-patch": "npm run build && npm version patch && npm publish"
+    "publish-patch": "npm run build && npm version patch && npm publish",
+    "publish-minor": "npm run build && npm version minor && npm publish"
   },
   "dependencies": {
     "react": "^19.0.0",
