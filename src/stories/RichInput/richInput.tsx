@@ -1,6 +1,6 @@
 import React from "react";
 import requireContext from "../../../lib/utilities/requireContext";
-import { Attribute, AttributeMenu, PrimaryInput, RichInput, RichInputContext, SecondaryInput, ShowOnFilter, Submit } from "../../../lib/RichInput";
+import { Attribute, AttributeMenu, PrimaryInput, RenderAttributes, RichInput, RichInputContext, SecondaryInput, ShowOnFilter, Submit } from "../../../lib/RichInput";
 
 import styles from "./richInput.module.css";
 
@@ -60,18 +60,6 @@ const GenderAttribute = () => {
     )
 }
 
-const AttributeBar = () => {
-    const { attribute } = requireContext(RichInputContext);
-
-    return (
-        <div className="flex">
-            { attribute.current.map((attribute) => {
-                return <div className="sty">{attribute.key}:{attribute.value}</div>
-            })}
-        </div>
-    )
-}
-
 export const RichInputMinimalStyling = () => {
     return (
         <RichInput onSubmit={() => Promise.resolve()}>
@@ -90,7 +78,9 @@ export const RichInputMinimalStyling = () => {
                     Submit
                 </Submit>
             </div>
-            <AttributeBar/>
+            <RenderAttributes render={(key, value) => (
+                <div className="sty">{key}:{value}</div>
+            )}/>
         </RichInput>
     )
 }

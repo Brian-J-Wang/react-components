@@ -1,4 +1,3 @@
-import React from "react";
 import { Meta, StoryObj } from "@storybook/react"
 import { within, userEvent } from "@storybook/testing-library";
 import {expect} from "@storybook/jest";
@@ -32,11 +31,9 @@ export const SecondaryInputOpened: Story = {
         const canvas = within(canvasElement);
 
         await userEvent.click(canvas.getByPlaceholderText("Enter name, or type '/' to filter by attributes"));
-
         await userEvent.keyboard("/");
 
         expect(canvas.getByText("Select Attribute:")).toBeInTheDocument();
-
         expect(canvas.getByTestId("secondary-input")).toBeVisible();
     }
 }

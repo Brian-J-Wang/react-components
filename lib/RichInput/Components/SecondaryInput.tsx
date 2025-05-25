@@ -49,8 +49,8 @@ export const SecondaryInput: React.FC<SecondaryInputProps> = ({className, ...pro
         setSecondaryInput(evt.target.value);
     }
 
-    const handleFocus = () => {
-        state.setState("secondary");
+    const focusOnInput = () => {
+        document.getElementById(id)!.focus();
     }
 
     const handleBlur = () => {
@@ -71,10 +71,10 @@ export const SecondaryInput: React.FC<SecondaryInputProps> = ({className, ...pro
     }
 
     return (
-        <div className={`${shouldBeHidden() ? styles['secondary-input__hidden'] : `${styles['secondary-input']} ${className}`}`}>
+        <div className={`${shouldBeHidden() ? styles['secondary-input__hidden'] : `${styles['secondary-input']} ${className}`}`} onClick={focusOnInput}>
             <p className={styles['secondary-input__span']}>/{getAttribute()}</p>
             <ResizeableInput id={id} className={styles['secondary-input__input']} {...props}
-            onChange={handleChange} value={secondaryInput} onKeyDown={handleKeyDown} onBlur={handleBlur} onFocus={handleFocus}/>
+            onChange={handleChange} value={secondaryInput} onKeyDown={handleKeyDown} onBlur={handleBlur} />
         </div>
     )
 }
