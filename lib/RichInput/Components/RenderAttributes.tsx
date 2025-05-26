@@ -1,18 +1,19 @@
 import { ReactNode } from "react"
 import requireContext from "../../utilities/requireContext"
 import { RichInputContext } from "./RichInput"
+import { Attribute, AttributesController } from "../Hooks"
 
 type RenderAttributeProps = {
-    render: (key: string, value: any) => ReactNode
+    render: (attribute: Attribute, context: AttributesController) => ReactNode
 }
 
 const RenderAttributes: React.FC<RenderAttributeProps> = (props) => {
-    const { attribute } = requireContext(RichInputContext);
+    const { attribute: attributeController } = requireContext(RichInputContext);
     return (
         <>
             {
-                attribute.current.map(({key, value}) => {
-                    return props.render(key, value);
+                attributeController.current.map((attribute) => {
+                    return props.render(attribute, attributeController);
                 })
             }
         </>

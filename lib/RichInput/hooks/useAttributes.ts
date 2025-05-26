@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-type Attribute = {
+export type Attribute = {
     key: string,
     value: any
 }
