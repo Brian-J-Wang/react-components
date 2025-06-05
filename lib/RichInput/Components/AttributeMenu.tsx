@@ -10,7 +10,7 @@ type AttributeMenuProps = React.HTMLAttributes<HTMLDivElement> & { }
 
 /** The component that renders all attribute children it controls when it shows up based on the input state*/
 const AttributeMenu: React.FC<AttributeMenuProps> = ({className, ...props}) => {
-    const { state, } = requireContext(RichInputContext);
+    const { state } = requireContext(RichInputContext);
     const [ id ] = useState<string>(createUID());
     const isHidden = state.current == "none" || state.current == "primary";
 

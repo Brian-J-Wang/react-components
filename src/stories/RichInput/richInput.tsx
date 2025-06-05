@@ -78,8 +78,8 @@ export const RichInputMinimalStyling = () => {
                     Submit
                 </Submit>
             </div>
-            <RenderAttributes render={(key, value) => (
-                <div className="sty">{key}:{value}</div>
+            <RenderAttributes render={(attribute, controller) => (
+                <div className="sty">{attribute.key}:{attribute.value}</div>
             )}/>
         </RichInput>
     )

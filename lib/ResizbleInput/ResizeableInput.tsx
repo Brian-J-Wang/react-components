@@ -1,37 +1,51 @@
-import { useState, forwardRef, useRef, RefObject } from "react";
+import { forwardRef, useEffect, useState } from "react";
 
 import styles from "./ResizeableInput.module.css"
+import { createUID } from "../utilities/createUID";
 
-type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
-    onInputChange?: (evt: React.ChangeEvent<HTMLInputElement>, setState: React.Dispatch<React.SetStateAction<string>>) => void;
+type InputProps = React.InputHTMLAttributes<HTMLDivElement> & {
+    onEnterPressed?: () => void;
+    onTextChange?: (newValue: string) => void;
 };
 
-/** Input that resizes based on the user input. Do NOT modify box-sizing, it will mess up width calculations. */
-const ResizeableInput = forwardRef<HTMLInputElement, InputProps>(({ style, className, onChange, onInputChange, value, onBlur, ...props}, ref) => {
-    const [defaultValue, setDefaultValue] = useState<string>("");
-    const spanRef = useRef<HTMLSpanElement>(undefined) as RefObject<HTMLSpanElement>;
+/** Input that resizes based on the user input. Single line only*/
+const ResizeableInput = forwardRef<HTMLDivElement, InputProps>(({ onEnterPressed, className, onTextChange, onKeyDown, id, ...props}, ref) => {
+    const [ _id ] = useState(id ?? createUID());
 
-    const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        if (onChange) {
-            onChange(evt);
-        } else {
-            setDefaultValue(evt.target.value);
+    const handleKeyDown = (evt: React.KeyboardEvent<HTMLDivElement>) => {
+        if (evt.key == "Enter") {
+            evt.preventDefault();
+
+            if (onEnterPressed) onEnterPressed();
         }
+
+        if (onKeyDown) onKeyDown(evt);
     }
 
-    const calculateWidth = () => {
-        if (!spanRef.current) return 4.3;
+    useEffect(() => {
+        const mutationObserver = new MutationObserver((records) => {
+            if (onTextChange) onTextChange(records[0].target.textContent ?? "");
+        });
 
-        spanRef.current.innerHTML = value as string ?? defaultValue;
-        
-        return spanRef.current.getBoundingClientRect().width + 4.3;
-    }
+        const element = document.getElementById(_id);
+
+        mutationObserver.observe(element!, {
+            subtree: true,
+            characterData: true
+        });
+
+        return () => {
+            mutationObserver.disconnect();
+        }
+    }, []);
 
     return (
         <>
-            <span ref={spanRef} className={`${styles.resizeable__span} ${className}`}></span>
+            <div ref={ref} id={_id} className={`${styles.resizeable__input} ${className}`} onKeyDown={handleKeyDown} 
+            contentEditable {...props} spellCheck="false" onBlur={props.onBlur}/>
+            {/* <span ref={spanRef} className={`${styles.resizeable__span} ${className}`}></span>
             <input style={{ ...style, width: calculateWidth()}} className={`${styles.resizeable__input} ${className}`} 
-            ref={ref} onChange={handleChange} value={value ?? defaultValue} onBlur={onBlur} {...props}/>
+            ref={ref} onChange={handleChange} value={value ?? defaultValue} onBlur={onBlur} {...props}/> */}
         </>
     )
 })

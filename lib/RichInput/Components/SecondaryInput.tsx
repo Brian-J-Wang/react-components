@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { RefObject, useEffect, useRef, useState } from "react";
 import requireContext from "../../utilities/requireContext"
 import { RichInputContext } from "./RichInput";
 import { createUID } from "../../utilities/createUID";
@@ -12,6 +12,7 @@ type SecondaryInputProps = React.HTMLAttributes<HTMLDivElement> & {}
 export const SecondaryInput: React.FC<SecondaryInputProps> = ({className, ...props}) => {
     const { cursor, state, secondaryInput, setSecondaryInput } = requireContext(RichInputContext);
     const [ id ] = useState<string>(createUID());
+    const resizeableInput = useRef<HTMLDivElement>(undefined) as RefObject<HTMLDivElement>;
 
     useEffect(() => {
         state.setId("secondary", id);
@@ -21,7 +22,7 @@ export const SecondaryInput: React.FC<SecondaryInputProps> = ({className, ...pro
         setSecondaryInput("");
     }, [state.current]);
 
-    const handleKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = (evt: React.KeyboardEvent<HTMLDivElement>) => {
         if (evt.key == "Tab") {
             evt.preventDefault();
         }
@@ -32,7 +33,7 @@ export const SecondaryInput: React.FC<SecondaryInputProps> = ({className, ...pro
             if (state.current == "secondary") cursor.move(evt.key == "ArrowUp" ? "up" : "down");
         }
 
-        if (evt.key == "Backspace" && (evt.target as HTMLInputElement).value.length == 0) {
+        if (evt.key == "Backspace" && (evt.target as HTMLDivElement).textContent?.length == 0) {
             if (state.current == "menu") {
                 state.setState("secondary");
                 //extra space to prevent backspace from clipping of end of attribute name
@@ -45,17 +46,13 @@ export const SecondaryInput: React.FC<SecondaryInputProps> = ({className, ...pro
         if (evt.key == "Enter") state.setState("menu");
     }
 
-    const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        setSecondaryInput(evt.target.value);
+    const handleChange = (newValue: string) => {
+        console.log(newValue);
+        setSecondaryInput(newValue);
     }
 
     const focusOnInput = () => {
-        document.getElementById(id)!.focus();
-    }
-
-    const handleBlur = () => {
-        // setText("");
-        // richInputContext.setInputState("notFocused");
+        resizeableInput.current?.focus();
     }
 
     const shouldBeHidden = () => {
@@ -73,8 +70,8 @@ export const SecondaryInput: React.FC<SecondaryInputProps> = ({className, ...pro
     return (
         <div className={`${shouldBeHidden() ? styles['secondary-input__hidden'] : `${styles['secondary-input']} ${className}`}`} onClick={focusOnInput}>
             <p className={styles['secondary-input__span']}>/{getAttribute()}</p>
-            <ResizeableInput id={id} className={styles['secondary-input__input']} {...props}
-            onChange={handleChange} value={secondaryInput} onKeyDown={handleKeyDown} onBlur={handleBlur} />
+            <ResizeableInput id={id} className={styles['secondary-input__input']} ref={resizeableInput}
+            onTextChange={handleChange} value={secondaryInput} onKeyDown={handleKeyDown} {...props}/>
         </div>
     )
 }

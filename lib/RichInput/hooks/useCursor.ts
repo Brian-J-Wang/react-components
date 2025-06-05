@@ -146,11 +146,8 @@ export default function useCursor() {
         const queue = [ cursor - 1, cursor + 1];
         const visited = [ cursor ];
 
-        if (cursor == -1) console.log(queue, visited);
-
         while (true) {
             const sample = queue.shift();
-            console.log(`testing: ${sample}`);
 
             //we reached the end of all cursors and no visible attributes were found;
             if (sample == undefined) {
@@ -160,12 +157,10 @@ export default function useCursor() {
 
             //out of bounds
             if (!withinBounds(sample)) {
-                console.log(`${sample} is not within bounds`);
                 continue;
             }
 
             if (attributes.current[sample].hidden) {
-                console.log(`${sample} is hidden`);
                 if (!visited.includes(sample + 1) && !queue.includes(sample + 1)) {
                     queue.push(sample + 1);
                 }
@@ -174,7 +169,6 @@ export default function useCursor() {
                 }
                 visited.push(sample);
             } else {
-                console.log(`${sample} is visible`);
                 setCursor( sample );
                 return;
             }
