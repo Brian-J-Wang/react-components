@@ -27,7 +27,7 @@ const Attribute: React.FC<AttributeProps> = ({ onClick, onMouseEnter, filterDisp
     const isSelected = cursor.current.name == props.name;
     if (inputState.menuState == "key" && !hidden) {
         return (
-            <AttributeKeyDisplay attributeName={props.name} filterDisplay={filterDisplay} onClick={onClick} onMouseEnter={onMouseEnter}/>
+            <AttributeKeyDisplay attributeName={props.name} filterDisplay={filterDisplay} onClick={onClick} onMouseEnter={onMouseEnter} {...props}/>
         )
     } else if (inputState.menuState == "value" && isSelected) {
         return (

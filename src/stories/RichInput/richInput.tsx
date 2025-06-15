@@ -63,7 +63,7 @@ const GenderAttribute = () => {
 export const RichInputMinimalStyling = () => {
     return (
         <RichInput onSubmit={() => Promise.resolve()}>
-            <AttributeMenu className={styles.attributeMenu}>
+            <AttributeMenu className={styles.attributeMenu} data-testid="attributeMenu">
                 <ShowOnFilter>
                     <h3 className={styles.attributeMenuTitle}>Select Attribute:</h3>
                 </ShowOnFilter>
