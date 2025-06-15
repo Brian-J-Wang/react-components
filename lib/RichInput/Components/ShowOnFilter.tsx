@@ -8,9 +8,9 @@ type ShowOnFilterProps = {
 
 /** The content that will be rendered when the menu mode is set to secondary */
 const ShowOnFilter: React.FC<ShowOnFilterProps> = (props) => {
-    const { state } = requireContext(RichInputContext);
+    const { inputState } = requireContext(RichInputContext);
 
-    if (state.current == "secondary") {
+    if (inputState.menuState == 'key') {
         return (props.children);
     } else {
         return (<></>);

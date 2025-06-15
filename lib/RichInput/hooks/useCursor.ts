@@ -1,16 +1,18 @@
 import { useEffect, useRef, useState } from "react";
+import { createUID } from "../../utilities/createUID";
 
-interface AttributeObj {
+export interface AttributeObj {
     hidden: boolean,
-    name: string
+    name: string,
+    onStateChange: (newState: boolean) => void;
 }
 
 export type CursorController = {
     attributes: AttributeObj[],
-    addToList: (name: string) => void,
+    addToList: (name: string, onStateChange?: (newState: boolean) => void) => void,
     removeFromList: (name: string) => void,
     current: AttributeObj,
-    move: (direction: "up" | "down") => void,
+    shiftCursor: (direction: "up" | "down") => void,
     jumpToIndex: (index: number) => void,
     jumpToAttribute: (name: string) => void,
     getAttribute: (name: string) => AttributeObj | undefined,
@@ -18,18 +20,45 @@ export type CursorController = {
     filterAttribute: (value: string ) => void
 }
 
-export default function useCursor() {
+type onCursorChangeEvent = (oldCursor: AttributeObj, newCursor: AttributeObj) => void
+
+export default function useCursor(): CursorController {
     const attributes = useRef<AttributeObj[]>([]);
     const [ cursor, setCursor ] = useState<number>(-1);
+    const onCursorChangeEvents = useRef<{
+        key: string,
+        fn: onCursorChangeEvent
+    }[]>([])
 
-    const addToList = (name: string) => {
+    const current = (cursor == -1)
+        ? {
+            hidden: true,
+            name: "undefined",
+            onStateChange: () => {}
+        } 
+        : attributes.current[cursor];
+
+    useEffect(() => {
+        //clears the attributes if this ever gets unmounted.
+        return () => {
+            attributes.current = [];
+        }
+    }, []);
+
+
+    const addToList = (name: string, onStateChange?: (newState: boolean) => void) => {
         if (attributes.current.some((value) => value.name  == name)) {
             throw new Error("Attribute already exists");
         }
 
+        if (!onStateChange) {
+            onStateChange = () => {}
+        }
+
         const attribute: AttributeObj = {
             hidden: false,
-            name: name
+            name: name,
+            onStateChange: onStateChange
         }
 
         attributes.current.push(attribute);
@@ -39,13 +68,7 @@ export default function useCursor() {
         }
     }
 
-    useEffect(() => {
-        //clears the attributes if this ever gets unmounted.
-        return () => {
-            attributes.current = [];
-        }
-    }, []);
-
+    
     const removeFromList = (name: string) => {
         let removedIndex = -1;
         attributes.current.filter((value, index) => {
@@ -62,42 +85,11 @@ export default function useCursor() {
         }
 
         //moves the cursor to the next, non-hidden attribute. Defaults to -1 if none is found;
-        let newCursor = -1;
-        const queue = [removedIndex];
-        const visited = new Set<number>();
-
-        while (queue.length != 0) {
-            const index = queue.shift() ?? -1;
-            visited.add(index);
-
-            //index is out of bounds of the cursor
-            if (index > attributes.current.length - 1 || index < 0) {
-                return;
-            }
-
-            if (attributes.current[index].hidden) {
-                //adds surrounding indices to the queue and return;
-                if (!visited.has(index - 1)) queue.push(index - 1);
-                if (!visited.has(index + 1)) queue.push(index + 1);
-                return;
-            } else {
-                newCursor = index;
-                break;
-            }
-        }
-
-        setCursor(newCursor);
+        moveToNearestVisibleAttribute();
     }
 
-    const current = (cursor == -1)
-        ? {
-            hidden: true,
-            name: "undefined"
-        } 
-        : attributes.current[cursor];
-
     //moves the cursor up or down to the next non-hidden attribute. Defaults to original cursor if none is found;
-    const move = (direction: "up" | "down") => {
+    const shiftCursor = (direction: "up" | "down") => {
         const next = () => {
             return (direction == "up") ? -1 : 1
         }
@@ -131,14 +123,37 @@ export default function useCursor() {
     }
 
     const filterAttribute = (input: string) => {
-        attributes.current.forEach((attribute) => {
-            attribute.hidden = attribute.name.slice(0, input.length) != input
-        })
+        attributes.current = attributes.current.map((attribute) => {
+            attribute.hidden = attribute.name.slice(0, input.length) != input;
+            attribute.onStateChange(attribute.hidden);
 
-        moveToNearestVisible();
+            return attribute;
+        });
+
+        moveToNearestVisibleAttribute();
     }
 
-    const moveToNearestVisible = () => {
+    const addCursorChangeEvent = (fn: onCursorChangeEvent) => {
+        const key = createUID();
+        onCursorChangeEvents.current.push({
+            key: key,
+            fn: fn
+        });
+
+        return key;
+    }
+
+    const removeCursorChangeEvent = (key: string) => {
+        onCursorChangeEvents.current = onCursorChangeEvents.current.filter((value) => value.key != key);
+    }
+
+    const emitCursorChange = (oldCursor: AttributeObj, newCursor: AttributeObj) => {
+        onCursorChangeEvents.current.forEach((value) => {
+            value.fn(oldCursor, newCursor);
+        })
+    }
+
+    const moveToNearestVisibleAttribute = () => {
         if (cursor != -1 && !attributes.current[cursor].hidden) {
             return;
         }
@@ -155,7 +170,6 @@ export default function useCursor() {
                 return;
             }
 
-            //out of bounds
             if (!withinBounds(sample)) {
                 continue;
             }
@@ -169,6 +183,7 @@ export default function useCursor() {
                 }
                 visited.push(sample);
             } else {
+                console.log(sample);
                 setCursor( sample );
                 return;
             }
@@ -180,7 +195,7 @@ export default function useCursor() {
         addToList,
         removeFromList,
         current,
-        move,
+        shiftCursor: shiftCursor,
         jumpToIndex,
         jumpToAttribute,
         getAttribute,

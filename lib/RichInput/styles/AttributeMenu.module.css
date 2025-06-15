@@ -1,5 +1,3 @@
 .menu__hidden {
-    border: none;
-    height: 0px;
-    overflow: hidden;
+    display: none;
 }

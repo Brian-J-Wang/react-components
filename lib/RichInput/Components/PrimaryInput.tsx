@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { createUID } from "../../utilities/createUID";
 import requireContext from "../../utilities/requireContext";
 import { RichInputContext } from "./RichInput";
@@ -9,17 +9,14 @@ type RichInputInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 }
 
 const PrimaryInput: React.FC<RichInputInputProps> = ({className, placeholder, ...props}) => {
-    const { state, primaryInput, setPrimaryInput, submit } = requireContext(RichInputContext);
+    const { inputState: state, primaryInput, setPrimaryInput, submit } = requireContext(RichInputContext);
     const [ id ] = useState(createUID());
 
-    useEffect(() => {
-        state.setId("primary", id);
-    }, [])
     
     const handleKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
         if (evt.key == "/" && primaryInput.length == 0) {
             evt.preventDefault();
-            state.setState("secondary")
+            state.switchFocus("secondary");
         }
 
         if (evt.key == "Enter") {
@@ -31,22 +28,13 @@ const PrimaryInput: React.FC<RichInputInputProps> = ({className, placeholder, ..
         setPrimaryInput(evt.target.value);
     }
 
-    const handleFocus = () => {
-        state.setState("primary");
-    }
-
     const _placeholder = () => {
-        if (state.current == "secondary" || state.current == "menu") {
-            return "";
-        } else {
-            return placeholder;
-        }
+        return placeholder;
     }
 
     return (
         <input id={id} value={primaryInput} onKeyDown={handleKeyDown} onChange={handleChange} className={`primary-input ${className}`} 
-        placeholder={_placeholder()} 
-        onFocus={handleFocus} {...props}/>
+        placeholder={_placeholder()} ref={state.primaryInput} {...props}/>
     )
 }
 

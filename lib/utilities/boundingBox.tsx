@@ -66,7 +66,7 @@ const BoundingBox: React.FC<BoundingBoxProps> = ({isActive, onBound, onOutOfBoun
     }
 
     return (
-        <div ref={boundingDiv} {...props}>
+        <div ref={boundingDiv} {...props} tabIndex={-1}>
             { props.children }
         </div>
     )

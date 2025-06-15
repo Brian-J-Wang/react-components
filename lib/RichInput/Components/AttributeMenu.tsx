@@ -1,33 +1,19 @@
+import styles from "../styles/AttributeMenu.module.css"
+import { forwardRef, useState } from "react";
 import requireContext from "../../utilities/requireContext";
 import { RichInputContext } from "./RichInput";
 import { createUID } from "../../utilities/createUID";
-import { useEffect, useState } from "react";
-import BoundingBox from "../../utilities/boundingBox";
-
-import styles from "../styles/AttributeMenu.module.css"
 
 type AttributeMenuProps = React.HTMLAttributes<HTMLDivElement> & { }
 
-/** The component that renders all attribute children it controls when it shows up based on the input state*/
-const AttributeMenu: React.FC<AttributeMenuProps> = ({className, ...props}) => {
-    const { state } = requireContext(RichInputContext);
-    const [ id ] = useState<string>(createUID());
-    const isHidden = state.current == "none" || state.current == "primary";
-
-    useEffect(() => {
-        state.setId("menu", id);
-    }, []);
-
-    const changeState = () => {
-        state.setState("none");
-    }
-
+const AttributeMenu = forwardRef<HTMLDivElement, AttributeMenuProps>(({className, ...props} , ref) => {
+    const { inputState } = requireContext(RichInputContext);
+    const [ _id ] = useState<string>(createUID()); 
     return (
-        <BoundingBox isActive={!isHidden} id={id} className={`${isHidden ? styles.menu__hidden : className}`} 
-        {...props} onOutOfBound={changeState}>
+        <div ref={ inputState.popupMenu } id={_id} className={`${inputState.menuVisible ? className : styles.menu__hidden}`} {...props} tabIndex={-1}>
             {props.children}   
-        </BoundingBox>
+        </div>
     )
-}
+});
 
 export default AttributeMenu;

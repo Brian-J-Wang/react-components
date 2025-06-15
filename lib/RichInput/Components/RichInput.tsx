@@ -1,11 +1,11 @@
-import { createContext, ReactNode, useState } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 import useCursor, { CursorController } from "../Hooks/useCursor";
-import useComponentState, { StateController } from "../Hooks/useComponentState";
+import useInputState, { InputStateController } from "../Hooks/useInputState";
 import useAttributes, { AttributesController } from "../Hooks/useAttributes";
 
 interface RichInputContextProps {
     cursor: CursorController,
-    state: StateController,
+    inputState: InputStateController,
     attribute: AttributesController,
     setAttributeValue: (value: any) => void
     primaryInput: string,
@@ -40,18 +40,24 @@ interface RichInputProps {
  */
 
 export const RichInput: React.FC<RichInputProps> = (props) => {
-    const state = useComponentState();
+    const inputState = useInputState();
     const cursor = useCursor();
     const attribute = useAttributes();
     const [ primaryInput, setPrimaryInput ] = useState<string>("");
-    const [ secondaryInput, _setSecondaryInput ] = useState<string>("");
+    const [ secondaryInput, setSecondaryInput ] = useState<string>("");
+
+    useEffect(() => {
+        if (inputState.menuVisible == false) {
+            cursor.jumpToIndex(0);
+        }
+
+    }, [inputState.menuVisible])
 
     const setAttributeValue = (value: any) => {
         attribute.add({
             key: cursor.current.name,
             value: value
         });
-        state.setState("primary");
     }
 
     const submit = () => {
@@ -66,16 +72,9 @@ export const RichInput: React.FC<RichInputProps> = (props) => {
         })
     }
 
-    const setSecondaryInput = (input: string) => {
-        _setSecondaryInput(input);
-        if (state.current == "secondary") {
-            cursor.filterAttribute(input);
-        }
-    }
-
     return (
         <RichInputContext.Provider value={{
-            cursor, state, attribute, setAttributeValue, primaryInput, setPrimaryInput, secondaryInput, setSecondaryInput, submit
+            cursor, inputState, attribute, setAttributeValue, primaryInput, setPrimaryInput, secondaryInput, setSecondaryInput, submit
         }}>
             <div className={props.className}>
                 {props.children}

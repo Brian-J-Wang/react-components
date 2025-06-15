@@ -1,4 +1,4 @@
-import { RefObject, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import requireContext from "../../utilities/requireContext"
 import { RichInputContext } from "./RichInput";
 import { createUID } from "../../utilities/createUID";
@@ -10,57 +10,71 @@ type SecondaryInputProps = React.HTMLAttributes<HTMLDivElement> & {}
 
 /** Handles the rendering of the input when inputing attributes */
 export const SecondaryInput: React.FC<SecondaryInputProps> = ({className, ...props}) => {
-    const { cursor, state, secondaryInput, setSecondaryInput } = requireContext(RichInputContext);
+    const { cursor, inputState, secondaryInput, setSecondaryInput } = requireContext(RichInputContext);
     const [ id ] = useState<string>(createUID());
-    const resizeableInput = useRef<HTMLDivElement>(undefined) as RefObject<HTMLDivElement>;
 
     useEffect(() => {
-        state.setId("secondary", id);
-    }, []);
-
-    useEffect(() => {
-        setSecondaryInput("");
-    }, [state.current]);
+        if (inputState.menuVisible == false) {
+            setSecondaryInput("");
+        }
+    }, [inputState.menuVisible]);
 
     const handleKeyDown = (evt: React.KeyboardEvent<HTMLDivElement>) => {
         if (evt.key == "Tab") {
             evt.preventDefault();
         }
         
-        if (evt.key == "ArrowUp" || evt.key == "ArrowDown") {
+        if ((evt.key == "ArrowUp" || evt.key == "ArrowDown") && inputState.menuState == "key") {
             evt.preventDefault();
-
-            if (state.current == "secondary") cursor.move(evt.key == "ArrowUp" ? "up" : "down");
+            cursor.shiftCursor(evt.key == "ArrowUp" ? "up" : "down");
         }
 
         if (evt.key == "Backspace" && (evt.target as HTMLDivElement).textContent?.length == 0) {
-            if (state.current == "menu") {
-                state.setState("secondary");
-                //extra space to prevent backspace from clipping of end of attribute name
-                setSecondaryInput(cursor.current.name + " ");
+            if (inputState.menuState == "key") {
+                inputState.switchFocus("primary");
             } else {
-                state.setState("primary");
+                inputState.setMenuState("key");
+                setSecondaryInput(cursor.current.name + ":");
             }
         }
 
-        if (evt.key == "Enter") state.setState("menu");
+        if (evt.key == "Enter") {
+            inputState.setMenuState("value");
+            if (inputState.secondaryInput.current) {
+                inputState.secondaryInput.current.textContent = "";
+            }
+            setSecondaryInput("");
+        }
     }
 
+    useEffect(() => {
+        if (inputState.menuState == "value") {
+            if (inputState.secondaryInput.current) {
+                inputState.secondaryInput.current.textContent = "";
+            }
+            setSecondaryInput("");
+        }
+    }, [inputState.menuState]);
+
     const handleChange = (newValue: string) => {
-        console.log(newValue);
         setSecondaryInput(newValue);
+        
+        if (inputState.menuState == "key") {
+            cursor.filterAttribute(newValue);
+        }
     }
 
     const focusOnInput = () => {
-        resizeableInput.current?.focus();
+        inputState.secondaryInput.current?.focus();
     }
 
     const shouldBeHidden = () => {
-        return state.current != "secondary" && state.current != "menu";
+        return inputState.currentFocus != "secondary" && !inputState.menuVisible;
     }
 
     const getAttribute = () => {
-        if (state.current == "menu") {
+        if (inputState.menuState == "value") {
+            console.log(cursor.current);
             return cursor.current.name + ":";
         } else {
             return "";
@@ -70,7 +84,7 @@ export const SecondaryInput: React.FC<SecondaryInputProps> = ({className, ...pro
     return (
         <div className={`${shouldBeHidden() ? styles['secondary-input__hidden'] : `${styles['secondary-input']} ${className}`}`} onClick={focusOnInput}>
             <p className={styles['secondary-input__span']}>/{getAttribute()}</p>
-            <ResizeableInput id={id} className={styles['secondary-input__input']} ref={resizeableInput}
+            <ResizeableInput id={id} className={styles['secondary-input__input']} ref={inputState.secondaryInput}
             onTextChange={handleChange} value={secondaryInput} onKeyDown={handleKeyDown} {...props}/>
         </div>
     )
