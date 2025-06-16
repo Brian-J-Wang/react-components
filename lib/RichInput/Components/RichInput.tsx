@@ -2,6 +2,7 @@ import { createContext, ReactNode, useEffect, useState } from "react";
 import useCursor, { CursorController } from "../Hooks/useCursor";
 import useInputState, { InputStateController } from "../Hooks/useInputState";
 import useAttributes, { AttributesController } from "../Hooks/useAttributes";
+import useEventState from "../Hooks/useEventState";
 
 interface RichInputContextProps {
     cursor: CursorController,
@@ -31,6 +32,8 @@ interface RichInputProps {
     onSubmit: (submission: SubmissionItem) => Promise<void>,
 }
 
+type InputStates = "none" | "primary" | "secondary" | "menu";
+
 /**
  * Represents the three different input states the user can be in.
  * @param notFocused input isn't selected.
@@ -38,7 +41,6 @@ interface RichInputProps {
  * @param filteringAttribute user has typed the keyword and is now looking their attribute.
  * @param selectingValue user is setting the value for their attribute.
  */
-
 export const RichInput: React.FC<RichInputProps> = (props) => {
     const inputState = useInputState();
     const cursor = useCursor();
@@ -50,7 +52,6 @@ export const RichInput: React.FC<RichInputProps> = (props) => {
         if (inputState.menuVisible == false) {
             cursor.jumpToIndex(0);
         }
-
     }, [inputState.menuVisible])
 
     const setAttributeValue = (value: any) => {
