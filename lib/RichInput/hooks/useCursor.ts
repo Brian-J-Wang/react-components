@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import { createUID } from "../../utilities/createUID";
 
 export interface AttributeObj {
     hidden: boolean,
@@ -20,15 +19,9 @@ export type CursorController = {
     filterAttribute: (value: string ) => void
 }
 
-type onCursorChangeEvent = (oldCursor: AttributeObj, newCursor: AttributeObj) => void
-
 export default function useCursor(): CursorController {
     const attributes = useRef<AttributeObj[]>([]);
     const [ cursor, setCursor ] = useState<number>(-1);
-    const onCursorChangeEvents = useRef<{
-        key: string,
-        fn: onCursorChangeEvent
-    }[]>([])
 
     const current = (cursor == -1)
         ? {
@@ -131,26 +124,6 @@ export default function useCursor(): CursorController {
         });
 
         moveToNearestVisibleAttribute();
-    }
-
-    const addCursorChangeEvent = (fn: onCursorChangeEvent) => {
-        const key = createUID();
-        onCursorChangeEvents.current.push({
-            key: key,
-            fn: fn
-        });
-
-        return key;
-    }
-
-    const removeCursorChangeEvent = (key: string) => {
-        onCursorChangeEvents.current = onCursorChangeEvents.current.filter((value) => value.key != key);
-    }
-
-    const emitCursorChange = (oldCursor: AttributeObj, newCursor: AttributeObj) => {
-        onCursorChangeEvents.current.forEach((value) => {
-            value.fn(oldCursor, newCursor);
-        })
     }
 
     const moveToNearestVisibleAttribute = () => {

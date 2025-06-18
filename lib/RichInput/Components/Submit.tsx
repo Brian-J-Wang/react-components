@@ -4,11 +4,11 @@ import { RichInputContext } from "./RichInput"
 type SubmitProps = React.HTMLAttributes<HTMLButtonElement> & { }
 
 const Submit: React.FC<SubmitProps> = ({ onClick, children, ...props }) => {
-    const { submit } = requireContext(RichInputContext);
+    const { submit, primaryInput } = requireContext(RichInputContext);
 
     const handleClick = (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
         onClick && onClick(evt);
-        submit();
+        submit(primaryInput.current.innerText);
     }
 
     return (

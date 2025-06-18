@@ -8,12 +8,12 @@ type RenderAttributeProps = {
 }
 
 const RenderAttributes: React.FC<RenderAttributeProps> = (props) => {
-    const { attribute: attributeController } = requireContext(RichInputContext);
+    const { attribute: attributes } = requireContext(RichInputContext);
     return (
         <>
             {
-                attributeController.current.map((attribute) => {
-                    return props.render(attribute, attributeController);
+                attributes.current.map((kvp) => {
+                    return props.render(kvp, attributes);
                 })
             }
         </>

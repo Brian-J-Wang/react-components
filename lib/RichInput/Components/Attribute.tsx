@@ -25,11 +25,11 @@ const Attribute: React.FC<AttributeProps> = ({ onClick, onMouseEnter, filterDisp
     }, []);
 
     const isSelected = cursor.current.name == props.name;
-    if (inputState.menuState == "key" && !hidden) {
+    if (inputState.state == "menuKey" && !hidden) {
         return (
             <AttributeKeyDisplay attributeName={props.name} filterDisplay={filterDisplay} onClick={onClick} onMouseEnter={onMouseEnter} {...props}/>
         )
-    } else if (inputState.menuState == "value" && isSelected) {
+    } else if (inputState.state == "menuValue" && isSelected) {
         return (
             <>
                 {props.children}
@@ -47,12 +47,13 @@ type AttributeKeyDisplayType = {
     onClick: React.MouseEventHandler<HTMLDivElement> | undefined,
     onMouseEnter: React.MouseEventHandler<HTMLDivElement> | undefined
 }
+
 const AttributeKeyDisplay: React.FC<AttributeKeyDisplayType> = ({ onClick, onMouseEnter, filterDisplay, ...props}) => {
     const { cursor, inputState } = requireContext(RichInputContext);
 
     const handleClick = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
         cursor.jumpToAttribute(props.attributeName);
-        inputState.setMenuState("value");
+        inputState.setState("menuValue");
         onClick && onClick(event);
     }
 

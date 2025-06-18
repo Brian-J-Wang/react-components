@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from "@storybook/react"
-import { within, userEvent, waitFor } from "@storybook/testing-library";
+import { within, userEvent } from "@storybook/testing-library";
 import {expect} from "@storybook/jest";
 
 import styles from "./richInput.module.css";

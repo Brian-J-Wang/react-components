@@ -10,7 +10,7 @@ type ShowOnFilterProps = {
 const ShowOnFilter: React.FC<ShowOnFilterProps> = (props) => {
     const { inputState } = requireContext(RichInputContext);
 
-    if (inputState.menuState == 'key') {
+    if (inputState.state == "menuKey") {
         return (props.children);
     } else {
         return (<></>);

@@ -57,15 +57,12 @@ const ResizeableInput = forwardRef<HTMLDivElement, InputProps>(({ onEnterPressed
         return () => {
             mutationObserver.disconnect();
         }
-    }, []);
+    }, [ onTextChange, _id]);
 
     return (
         <>
             <div ref={ref} id={_id} className={`${styles.resizeable__input} ${className}`} onKeyDown={handleKeyDown} 
             contentEditable {...props} spellCheck="false" onBlur={props.onBlur}/>
-            {/* <span ref={spanRef} className={`${styles.resizeable__span} ${className}`}></span>
-            <input style={{ ...style, width: calculateWidth()}} className={`${styles.resizeable__input} ${className}`} 
-            ref={ref} onChange={handleChange} value={value ?? defaultValue} onBlur={onBlur} {...props}/> */}
         </>
     )
 })

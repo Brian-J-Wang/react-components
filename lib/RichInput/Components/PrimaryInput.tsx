@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { createUID } from "../../utilities/createUID";
 import requireContext from "../../utilities/requireContext";
 import { RichInputContext } from "./RichInput";
 
@@ -8,33 +7,34 @@ import "../styles/PrimaryInput.module.css";
 type RichInputInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 }
 
-const PrimaryInput: React.FC<RichInputInputProps> = ({className, placeholder, ...props}) => {
-    const { inputState: state, primaryInput, setPrimaryInput, submit } = requireContext(RichInputContext);
-    const [ id ] = useState(createUID());
+const PrimaryInput: React.FC<RichInputInputProps> = ({className, ...props}) => {
+    const { inputState, submit, primaryInput, resolveInputBlur } = requireContext(RichInputContext);
+    const [ input, setInput ] = useState<string>("");
 
-    
     const handleKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
-        if (evt.key == "/" && primaryInput.length == 0) {
+        if (evt.key == "/" && input.length == 0) {
             evt.preventDefault();
-            state.switchFocus("secondary");
+            inputState.setState("menuKey");
         }
 
         if (evt.key == "Enter") {
-            submit();
+            submit(input).then(() => {
+                setInput("");
+            });
         }
     }
 
     const handleChange = (evt: React.ChangeEvent<HTMLInputElement>) => {
-        setPrimaryInput(evt.target.value);
+        setInput(evt.target.value);
     }
 
-    const _placeholder = () => {
-        return placeholder;
+    const handleFocus = () => {
+        inputState.setState("primary");
     }
 
     return (
-        <input id={id} value={primaryInput} onKeyDown={handleKeyDown} onChange={handleChange} className={`primary-input ${className}`} 
-        placeholder={_placeholder()} ref={state.primaryInput} {...props}/>
+        <input ref={primaryInput} value={input} onKeyDown={handleKeyDown} onChange={handleChange} className={`primary-input ${className}`} 
+        onFocus={handleFocus} onBlur={resolveInputBlur} {...props}/>
     )
 }
 
