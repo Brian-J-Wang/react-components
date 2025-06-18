@@ -17,12 +17,13 @@
 
 .secondary-input__span {
     text-wrap: nowrap;
-    margin: 0px 0px 0px 1px;
+    margin: 0px 0px 0px 0px;
     font: inherit;
 }
 
 .secondary-input__input {
-    padding: 0px 2px 0px 0px;
+    padding: 0px 4px 0px 0.5px;
+    background-color: rgba(0, 0, 0, 0);
     outline: none;
     vertical-align: baseline;
     font: inherit;
