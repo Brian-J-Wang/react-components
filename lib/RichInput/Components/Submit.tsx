@@ -7,7 +7,7 @@ const Submit: React.FC<SubmitProps> = ({ onClick, children, ...props }) => {
     const { submit, primaryInput } = requireContext(RichInputContext);
 
     const handleClick = (evt: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-        onClick && onClick(evt);
+        if (onClick) onClick(evt);
         submit(primaryInput.current.innerText);
     }
 

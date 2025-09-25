@@ -12,6 +12,8 @@ type NavigableListProps = PropsWithChildren & {
 const NavigableMenu: React.FC<NavigableListProps> = (props) => {
     const content = useRef<HTMLDivElement>(null as unknown as HTMLDivElement);
     const navigationSurface = useLinearNavigation<string>([]);
+    
+    const activeStyling = props.activeClass.split(" ").filter(Boolean);
 
     useEffect(() => {
         if (!content) return;
@@ -34,7 +36,7 @@ const NavigableMenu: React.FC<NavigableListProps> = (props) => {
                     if (index == 0) {
                         return currentNode;
                     } else {
-                        content.current.querySelector(`[data-menuitem=${navigationSurface.activeNode}]`)?.classList.remove(props.activeClass)
+                        content.current.querySelector(`[data-menuitem=${navigationSurface.activeNode}]`)?.classList.remove(...activeStyling)
                         return surface[index - 1];
                     }
                 });
@@ -46,7 +48,7 @@ const NavigableMenu: React.FC<NavigableListProps> = (props) => {
                     if (index == surface.length - 1) {
                         return currentNode;
                     } else {
-                        content.current.querySelector(`[data-menuitem=${navigationSurface.activeNode}]`)?.classList.remove(props.activeClass)
+                        content.current.querySelector(`[data-menuitem=${navigationSurface.activeNode}]`)?.classList.remove(...activeStyling)
                         return surface[index + 1]
                     }
                 })
@@ -60,13 +62,13 @@ const NavigableMenu: React.FC<NavigableListProps> = (props) => {
         return () => {
             document.removeEventListener("keydown", onKeyboardInput);
         }
-    }, [navigationSurface, props.active, props.activeClass]);
+    }, [navigationSurface, props.active, activeStyling]);
 
     useEffect(() => {
         if (props.active) {
-            content.current.querySelector(`[data-menuitem=${navigationSurface.activeNode}]`)?.classList.add(props.activeClass);
+            content.current.querySelector(`[data-menuitem=${navigationSurface.activeNode}]`)?.classList.add(...activeStyling);
         } else {
-            content.current.querySelector(`[data-menuitem=${navigationSurface.activeNode}]`)?.classList.remove(props.activeClass);
+            content.current.querySelector(`[data-menuitem=${navigationSurface.activeNode}]`)?.classList.remove(...activeStyling);
             navigationSurface.shiftActiveNode((surface) => {
                 return surface[0];
             })
@@ -75,7 +77,7 @@ const NavigableMenu: React.FC<NavigableListProps> = (props) => {
 
     const handleHover = (name: string) => {
         navigationSurface.shiftActiveNode(() => {
-            content.current.querySelector(`[data-menuitem=${navigationSurface.activeNode}]`)?.classList.remove(props.activeClass)
+            content.current.querySelector(`[data-menuitem=${navigationSurface.activeNode}]`)?.classList.remove(...activeStyling)
             return name;
         })
     }

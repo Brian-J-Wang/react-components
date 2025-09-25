@@ -1,17 +1,15 @@
 import { PropsWithChildren, useContext } from "react";
 import { NavigableMenuContext } from "./NavigableMenu";
 
-type MenuItemProps = PropsWithChildren & {
-    className?: string,
+type MenuItemProps = PropsWithChildren & Omit<React.ComponentProps<"div">, "onMouseOver"> & {
     name: string,
-    id?: string
 }
 
 const MenuItem: React.FC<MenuItemProps> = (props) => {
     const menuContext = useContext(NavigableMenuContext);
 
     return (
-        <div className={props.className} data-menuitem={props.name} onMouseOver={() => { menuContext.handleHover(props.name)}}>
+        <div data-menuitem={props.name} onMouseOver={() => { menuContext.handleHover(props.name)}} {...props}>
             { props.children }
         </div>
     )

@@ -1,5 +1,4 @@
-import { createContext, ReactNode, RefObject, useRef } from "react";
-import useCursor, { CursorController } from "../Hooks/useCursor";
+import { createContext, ReactNode, RefObject, useRef, useState } from "react";
 import useAttributes, { AttributesController } from "../Hooks/useAttributes";
 import useEventState, { useEventStateReturn } from "../Hooks/useEventState";
 
@@ -10,10 +9,11 @@ interface RichInputContextProps {
     secondaryInput: RefObject<HTMLDivElement>,
     popupMenu: RefObject<HTMLDivElement>,
     resolveInputBlur: (ev: React.FocusEvent<HTMLElement>) => void,
-    cursor: CursorController,
     inputState: useEventStateReturn<ValidInputStates>,
     attribute: AttributesController,
-    setAttributeValue: (value: any) => void
+    setAttributeValue: (value: string) => void,
+    activeAttribute: ReactNode | null,
+    setActiveAttribute: (element: ReactNode) => void,
     submit: (input: string) => Promise<void>
 }
 
@@ -21,7 +21,7 @@ export type SubmissionItem = {
     input: string,
     attributes: {
         key: string,
-        value: any
+        value: string
     }[]
 }
 
@@ -45,8 +45,8 @@ export const RichInput: React.FC<RichInputProps> = (props) => {
     const secondaryInput = useRef<HTMLDivElement>(null) as RefObject<HTMLDivElement>;
     const popupMenu = useRef<HTMLDivElement>(null) as RefObject<HTMLDivElement>;
     const inputState = useEventState<ValidInputStates>("none");
-    const cursor = useCursor();
     const attribute = useAttributes();
+    const [ activeAttribute, setActiveAttribute ] = useState<ReactNode | null>(null);
 
     const resolveInputBlur = (ev: React.FocusEvent<HTMLElement>) => {
         //refocuses the cursor on the secondary input if the click was within the popup menu
@@ -65,10 +65,9 @@ export const RichInput: React.FC<RichInputProps> = (props) => {
         }
     }
 
-    const setAttributeValue = (value: any) => {
-        console.log(value);
+    const setAttributeValue = (value: string) => {
         attribute.add({
-            key: cursor.current.name,
+            key: "temp",
             value: value
         });
         inputState.setState("none");
@@ -85,7 +84,7 @@ export const RichInput: React.FC<RichInputProps> = (props) => {
 
     return (
         <RichInputContext.Provider value={{
-            primaryInput, secondaryInput, popupMenu, resolveInputBlur, cursor, inputState, attribute, setAttributeValue, submit
+            primaryInput, secondaryInput, popupMenu, resolveInputBlur, activeAttribute, setActiveAttribute, inputState, attribute, setAttributeValue, submit
         }}>
             <div className={props.className}>
                 {props.children}

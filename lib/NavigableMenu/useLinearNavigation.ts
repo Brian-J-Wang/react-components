@@ -14,13 +14,11 @@ export default function useLinearNavigation<T>(initialSurface: Array<T>) {
         let activeNodeIncluded = false;
         const newSurfaceWithActiveNode = navigationSurface.current.filter((node) => {
             if (newSurface.includes(node)) {
-                console.log(node);
                 if (node == activeNode) {
                     activeNodeIncluded = true;
                 }
                 return true;
             } else if (node == activeNode) {
-                console.log("here");
                 return true;
             } else {
                 return false;
