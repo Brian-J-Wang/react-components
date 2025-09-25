@@ -61,7 +61,6 @@ export default function useCursor(): CursorController {
         }
     }
 
-    
     const removeFromList = (name: string) => {
         let removedIndex = -1;
         attributes.current.filter((value, index) => {

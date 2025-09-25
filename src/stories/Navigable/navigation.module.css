@@ -1,0 +1,7 @@
+.menuItem {
+    background-color: gray;
+}
+
+.activeClass {
+    background-color: blue;
+}
