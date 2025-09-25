@@ -1,18 +1,16 @@
-import { PropsWithChildren, useEffect, useRef, createContext } from "react"
+import { PropsWithChildren, useEffect, useRef } from "react"
 import useLinearNavigation from "./useLinearNavigation";
-
-
-export const NavigableMenuContext = createContext<{ handleHover: (name: string) => void}>({ handleHover: () => {}});
+import { NavigableMenuContext } from "./NavigableMenuContext";
 
 type NavigableListProps = PropsWithChildren & {
     activeClass: string;
     active: boolean;
+    onMenuItemClick?: (name: string) => void
 }
 
 const NavigableMenu: React.FC<NavigableListProps> = (props) => {
     const content = useRef<HTMLDivElement>(null as unknown as HTMLDivElement);
     const navigationSurface = useLinearNavigation<string>([]);
-    
     const activeStyling = props.activeClass.split(" ").filter(Boolean);
 
     useEffect(() => {
@@ -42,9 +40,7 @@ const NavigableMenu: React.FC<NavigableListProps> = (props) => {
                 });
             } else if (ev.key === "ArrowDown") {
                 navigationSurface.shiftActiveNode((surface, currentNode) => {
-                    
                     const index = surface.indexOf(currentNode);
-                    console.log(index, surface.length);
                     if (index == surface.length - 1) {
                         return currentNode;
                     } else {
@@ -76,14 +72,21 @@ const NavigableMenu: React.FC<NavigableListProps> = (props) => {
     });
 
     const handleHover = (name: string) => {
+        if (navigationSurface.activeNode == name) {
+            return;
+        }
         navigationSurface.shiftActiveNode(() => {
             content.current.querySelector(`[data-menuitem=${navigationSurface.activeNode}]`)?.classList.remove(...activeStyling)
             return name;
         })
     }
 
+    const handleClick = (value: string) => {
+        if (props.onMenuItemClick) props.onMenuItemClick(value);
+    }
+
     return (
-        <NavigableMenuContext.Provider value={{handleHover}}>
+        <NavigableMenuContext.Provider value={{handleHover, handleClick}}>
             <div tabIndex={-1} ref={content}>
                 {
                     props.children

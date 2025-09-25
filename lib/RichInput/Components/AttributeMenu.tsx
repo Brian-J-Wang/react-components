@@ -8,10 +8,10 @@ import FilterableList from "../../FilterableList/FilterableList";
 
 type AttributeMenuProps = React.HTMLAttributes<HTMLDivElement> & { 
     /** this class styling will be added to the node that is focused */
-    activeClass: string
+    activeClass?: string
 }
 
-const AttributeMenu: React.FC<AttributeMenuProps> = ({className, ...props}) => {
+const AttributeMenu: React.FC<AttributeMenuProps> = ({className, activeClass, ...props}) => {
     const { inputState, popupMenu, activeAttribute } = requireContext(RichInputContext);
     const [ _id ] = useState<string>(createUID());
 
@@ -21,7 +21,7 @@ const AttributeMenu: React.FC<AttributeMenuProps> = ({className, ...props}) => {
         <div id={_id} ref={popupMenu} className={`${menuVisible ? className : styles.menu__hidden}`} {...props} tabIndex={-1}>
             {
                 activeAttribute ? activeAttribute : 
-                <NavigableMenu activeClass={props.activeClass} active={menuVisible}>
+                <NavigableMenu activeClass={activeClass ?? ""} active={menuVisible}>
                     <FilterableList filter={""}>
                         {props.children}
                     </FilterableList>

@@ -11,11 +11,11 @@ type AttributeProps = React.HTMLAttributes<HTMLDivElement> & {
  *  Children will be shown if selected and inputState is "selectingValue".
  *  The menuDisplay component will be shown if inputState is "filteringAttribute".
 */
-const Attribute: React.FC<AttributeProps> = ({ onClick, attributeContent, ...props}) => {
+const Attribute: React.FC<AttributeProps> = ({ attributeContent, ...props}) => {
     const { setActiveAttribute } = requireContext(RichInputContext);
 
     const handleClick = () => {
-        if (onClick) setActiveAttribute(attributeContent);
+        setActiveAttribute(attributeContent);
     }
 
     return (
