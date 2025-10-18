@@ -8,6 +8,7 @@ type ElementFilterProps = React.PropsWithChildren & {
  * filtered through filterNamelessElement prop. non-element nodes are ignored.
   */
 const FilterableList: React.FC<ElementFilterProps> = (props) => {
+    console.log(React.Children.toArray(props.children));
     return React.Children.toArray(props.children).filter((child) => {
         if (!isValidElement<{ "data-filterable": string,"data-name"?: string }>(child)) {
             return true;

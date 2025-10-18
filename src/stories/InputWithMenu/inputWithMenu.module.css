@@ -14,13 +14,25 @@
     justify-content: end;
 }
 
-.attributeMenu {
+.menu {
     border: 1px solid;
     margin-bottom: 12px;
 }
 
-.attributeMenuTitle {
-    margin: 6px 2px;
+.menuInput {
+    height: 24px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.menuItem {
+    height: 24px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.menuItemActive {
+    background-color: blue;
 }
 
 .inputBox {

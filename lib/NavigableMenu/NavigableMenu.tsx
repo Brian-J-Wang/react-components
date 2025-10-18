@@ -6,6 +6,7 @@ type NavigableListProps = PropsWithChildren & {
     activeClass: string;
     active: boolean;
     onMenuItemClick?: (name: string) => void
+    onMenuItemShift?: (name: string) => void
 }
 
 const NavigableMenu: React.FC<NavigableListProps> = (props) => {
@@ -86,7 +87,7 @@ const NavigableMenu: React.FC<NavigableListProps> = (props) => {
     }
 
     return (
-        <NavigableMenuContext.Provider value={{handleHover, handleClick}}>
+        <NavigableMenuContext.Provider value={{handleHover, handleClick, activeNode: navigationSurface.activeNode ?? ""}}>
             <div tabIndex={-1} ref={content}>
                 {
                     props.children

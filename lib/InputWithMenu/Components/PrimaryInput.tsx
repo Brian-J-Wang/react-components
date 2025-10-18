@@ -1,6 +1,6 @@
-import { useState } from "react";
 import requireContext from "../../utilities/requireContext";
-import { RichInputContext } from "./RichInput";
+import { InputWithMenuContext } from "../Contexts/inputWithMenuContext";
+
 
 import "../styles/PrimaryInput.module.css";
 
@@ -8,19 +8,16 @@ type RichInputInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 }
 
 const PrimaryInput: React.FC<RichInputInputProps> = ({className, ...props}) => {
-    const { inputState, submit, primaryInput, resolveInputBlur } = requireContext(RichInputContext);
-    const [ input, setInput ] = useState<string>("");
+    const { input, setInput, setMenuVisible, submit } = requireContext(InputWithMenuContext);
 
     const handleKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
         if (evt.key == "/" && input.length == 0) {
             evt.preventDefault();
-            inputState.setState("menuKey");
+            setMenuVisible(true);
         }
 
         if (evt.key == "Enter") {
-            submit(input).then(() => {
-                setInput("");
-            });
+            submit();
         }
     }
 
@@ -29,12 +26,12 @@ const PrimaryInput: React.FC<RichInputInputProps> = ({className, ...props}) => {
     }
 
     const handleFocus = () => {
-        inputState.setState("primary");
+        setMenuVisible(false);
     }
 
     return (
-        <input ref={primaryInput} value={input} onKeyDown={handleKeyDown} onChange={handleChange} className={`primary-input ${className}`} 
-        onFocus={handleFocus} onBlur={resolveInputBlur} {...props}/>
+        <input value={input} onKeyDown={handleKeyDown} onChange={handleChange} className={`primary-input ${className}`} 
+        onFocus={handleFocus} {...props}/>
     )
 }
 
