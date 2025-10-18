@@ -1,4 +1,4 @@
 {
     "extends": "./tsconfig.app.json",
-    "include": ["lib", "lib/utilities", "./globals.d.ts", "./globals.d.tsx"]
+    "include": ["lib", "lib/utilities", "./globals.d.ts", "./globals.d.tsx", "src"]
 }
