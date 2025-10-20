@@ -1,4 +1,4 @@
-import requireContext from "../../utilities/requireContext";
+import RequireContext from "../../utilities/requireContext";
 import { InputWithMenuContext } from "../Contexts/inputWithMenuContext";
 
 
@@ -8,7 +8,7 @@ type RichInputInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 }
 
 const PrimaryInput: React.FC<RichInputInputProps> = ({className, ...props}) => {
-    const { input, setInput, setMenuVisible, submit } = requireContext(InputWithMenuContext);
+    const { input, setInput, setMenuVisible, submit } = RequireContext(InputWithMenuContext);
 
     const handleKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
         if (evt.key == "/" && input.length == 0) {

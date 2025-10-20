@@ -1,7 +1,7 @@
 import { useContext } from "react";
 
 /** Forces context to be available in component tree or an error will be thrown. */
-function requireContext<T>(context: React.Context<T>) {
+function RequireContext<T>(context: React.Context<T>) {
     const result = useContext(context);
 
     if (result == undefined) {
@@ -11,4 +11,4 @@ function requireContext<T>(context: React.Context<T>) {
     }
 }
 
-export default requireContext;
+export default RequireContext;

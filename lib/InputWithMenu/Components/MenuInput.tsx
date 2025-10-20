@@ -1,5 +1,5 @@
 import { ChangeEvent } from "react";
-import requireContext from "../../utilities/requireContext";
+import RequireContext from "../../utilities/requireContext";
 import menuContext from "../Contexts/menuContext";
 
 import styles from "../styles/MenuInput.module.css";
@@ -9,8 +9,8 @@ type MenuInputProps = React.HTMLAttributes<HTMLInputElement> & {}
 
 /** Handles the rendering of the input when inputing attributes */
 export const MenuInput: React.FC<MenuInputProps> = ({className, ...props}) => {
-    const { cursor, menuInputElement } = requireContext(InputWithMenuContext);
-    const { filter, setFilter } = requireContext(menuContext);
+    const { cursor, menuInputElement } = RequireContext(InputWithMenuContext);
+    const { filter, setFilter } = RequireContext(menuContext);
 
     const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
         setFilter(evt.target.value);

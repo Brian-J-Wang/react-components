@@ -1,5 +1,5 @@
 import styles from "../styles/AttributeMenu.module.css";
-import requireContext from "../../utilities/requireContext";
+import RequireContext from "../../utilities/requireContext";
 import { InputWithMenuContext } from "../Contexts/inputWithMenuContext";
 import { useEffect } from "react";
 
@@ -7,7 +7,7 @@ type AttributeMenuProps = React.HTMLAttributes<HTMLDivElement> & {
 }
 
 const Menu: React.FC<AttributeMenuProps> = ({className, onClick, ...props}) => {
-    const { menuVisible, menuInputElement } = requireContext(InputWithMenuContext);
+    const { menuVisible, menuInputElement } = RequireContext(InputWithMenuContext);
 
     useEffect(() => {
         if (menuVisible) {
