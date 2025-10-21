@@ -19,7 +19,7 @@ type RichInputProps = React.PropsWithChildren & {
  * @param filteringAttribute user has typed the keyword and is now looking their attribute.
  * @param selectingValue user is setting the value for their attribute.
  */
-export const InputWithMenu: React.FC<RichInputProps> = ({ menuItems, onSubmit, config = defaultInputWithMenuConfig, ...props }) => {
+const InputWithMenu: React.FC<RichInputProps> = ({ menuItems, onSubmit, config = defaultInputWithMenuConfig, ...props }) => {
     const primaryInputElement = useRef<HTMLInputElement>(undefined) as RefObject<HTMLInputElement>;
     const menuInputElement = useRef<HTMLInputElement>(undefined) as RefObject<HTMLInputElement>;
     const [ input, setInput ] = useState<string>("");
@@ -107,3 +107,5 @@ export const InputWithMenu: React.FC<RichInputProps> = ({ menuItems, onSubmit, c
         </InputWithMenuContext.Provider>
     )
 }
+
+export default InputWithMenu;
