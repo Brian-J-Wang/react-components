@@ -9,7 +9,7 @@ type MenuInputProps = React.HTMLAttributes<HTMLInputElement> & {}
 
 /** Handles the rendering of the input when inputing attributes */
 export const MenuInput: React.FC<MenuInputProps> = ({className, ...props}) => {
-    const { cursor, menuInputElement } = RequireContext(InputWithMenuContext);
+    const { menuInputElement, onHandles } = RequireContext(InputWithMenuContext);
     const { filter, setFilter } = RequireContext(menuContext);
 
     const handleChange = (evt: ChangeEvent<HTMLInputElement>) => {
@@ -31,14 +31,10 @@ export const MenuInput: React.FC<MenuInputProps> = ({className, ...props}) => {
 
         if (evt.key == "ArrowUp") {
             evt.preventDefault();
-            cursor.moveCursor("down", (item) => {
-                return item.id.substring(0, filter.length) == filter;
-            });//
+            onHandles.onArrowUpPress();
         } else if (evt.key == "ArrowDown") {
             evt.preventDefault();
-            cursor.moveCursor("up", (item) => {
-                return item.id.substring(0, filter.length) == filter;
-            });
+            onHandles.onArrowDownPress();
         }
     }
 

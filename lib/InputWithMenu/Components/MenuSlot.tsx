@@ -1,5 +1,5 @@
 import { cloneElement, ReactElement, } from "react";
-import RequireContext from "../../utilities/requireContext"
+import requireContext from "../../utilities/requireContext"
 import menuContext, { MenuItem } from "../Contexts/menuContext"
 import { InputWithMenuContext } from "../Contexts/inputWithMenuContext";
 
@@ -8,8 +8,8 @@ type MenuSlotProps = {
 }
 
 const MenuSlot: React.FC<MenuSlotProps> = (props) => {
-    const { cursor } = RequireContext(InputWithMenuContext);
-    const { filter, menuItems } = RequireContext(menuContext);
+    const { cursor } = requireContext(InputWithMenuContext);
+    const { filter, menuItems } = requireContext(menuContext);
     return (
         <>
             {
