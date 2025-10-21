@@ -25,6 +25,10 @@ export default function useArrayCursor<T>(value: T[], identifier: (item: T) => u
 
     //updates the cursor to the new array if there is a matching identifier
     useEffect(() => {
+        if (array.current.length == 0) {
+            return;
+        }
+        
         const itemID = identifier(array.current[index]);
 
         const newCursorPosition = value.findIndex((item) => {
