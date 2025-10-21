@@ -6,5 +6,5 @@
         "outDir": "dist",
         "composite": true
     },
-    "include": ["lib", "lib/utilities", "./globals.d.ts" ]
+    "include": ["lib", "lib/utilities"]
 }
