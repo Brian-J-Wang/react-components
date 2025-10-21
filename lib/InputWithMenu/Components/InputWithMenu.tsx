@@ -25,6 +25,7 @@ export const InputWithMenu: React.FC<RichInputProps> = ({ menuItems, onSubmit, c
     const [ input, setInput ] = useState<string>("");
     const [ menuVisible, setMenuVisible ] = useState<boolean>(false);
     const [ filter, _setFilter ] = useState<string>("");
+    const [ menuMode, setMenuMode ] = useState<"select" | "display">("select");
 
     if (config.requireUnique) {
         const set = new Set();
@@ -58,27 +59,45 @@ export const InputWithMenu: React.FC<RichInputProps> = ({ menuItems, onSubmit, c
     }
 
     const onArrowUpPress = () => {
-        cursor.moveCursor("down", (item) => {
-            return item.id.substring(0, filter.length) == filter;
-        });
-        _setFilter(cursor.current.id);
+        if (menuMode == "select") {
+            cursor.moveCursor("down", (item) => {
+                return item.id.substring(0, filter.length) == filter;
+            });
+        } 
     }
 
     const onArrowDownPress = () => {
-        cursor.moveCursor("up", (item) => {
-            return item.id.substring(0, filter.length) == filter;
-        });
-        _setFilter(cursor.current.id);
+        if (menuMode == "select") {
+            cursor.moveCursor("up", (item) => {
+                return item.id.substring(0, filter.length) == filter;
+            });
+        }
+    }
+
+    const onEnterPress = () => {
+        if (menuMode == "select") {
+            setMenuMode("display");
+        }
+    }
+
+    const onBackspacePress = () => {
+        if (menuMode == "select") {
+            primaryInputElement.current.focus();
+        } else {
+            setMenuMode("select");
+        }
     }
 
     const onHandles = {
         onArrowDownPress,
-        onArrowUpPress
+        onArrowUpPress,
+        onEnterPress,
+        onBackspacePress
     }
 
     return (
         <InputWithMenuContext.Provider value={{
-            input, setInput, menuVisible, setMenuVisible, submit, primaryInputElement, menuInputElement, onHandles, cursor
+            input, setInput, menuVisible, setMenuVisible, submit, primaryInputElement, menuInputElement, onHandles, cursor, menuMode
         }}>
             <menuContext.Provider value={{filter, setFilter, menuItems}}>
                 <div className={props.className} tabIndex={-1}>

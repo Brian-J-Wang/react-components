@@ -11,9 +11,12 @@ interface InputWithMenuContextProps {
     cursor: ArrayCursorController<MenuItem>,
     primaryInputElement: RefObject<HTMLInputElement> | undefined,
     menuInputElement: RefObject<HTMLInputElement> | undefined,
+    menuMode: "select" | "display",
     onHandles: {
         onArrowUpPress: () => void,
-        onArrowDownPress: () => void
+        onArrowDownPress: () => void,
+        onEnterPress: () => void,
+        onBackspacePress: () => void
     }
 }
 

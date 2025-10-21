@@ -22,11 +22,13 @@ export const MenuInput: React.FC<MenuInputProps> = ({className, ...props}) => {
         }
         
         if (evt.key == "Backspace") {
-            //TODO: Switch menu input back to the primary input and hide menu
+            if ((evt.target as HTMLInputElement).value == "") {
+                onHandles.onBackspacePress();
+            }
         }
 
         if (evt.key == "Enter") {
-            //TODO: Set menu to render the element when it is selected
+            onHandles.onEnterPress();
         }
 
         if (evt.key == "ArrowUp") {

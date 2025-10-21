@@ -7,7 +7,7 @@ type AttributeMenuProps = React.HTMLAttributes<HTMLDivElement> & {
 }
 
 const Menu: React.FC<AttributeMenuProps> = ({className, onClick, ...props}) => {
-    const { menuVisible, menuInputElement } = RequireContext(InputWithMenuContext);
+    const { menuVisible, menuInputElement, menuMode, cursor } = RequireContext(InputWithMenuContext);
 
     useEffect(() => {
         if (menuVisible) {
@@ -27,7 +27,8 @@ const Menu: React.FC<AttributeMenuProps> = ({className, onClick, ...props}) => {
     return (
         <div className={`${menuVisible ? className : styles.menu__hidden}`} onMouseDown={handleMouseDown} {...props} tabIndex={-1}>
             {
-                props.children
+                (menuMode == "display") ? 
+                cursor.current.content : props.children
             }
         </div>
     )
