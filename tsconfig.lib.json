@@ -1,4 +1,10 @@
 {
-    "extends": "./tsconfig.app.json",
-    "include": ["lib", "lib/utilities", "./globals.d.ts", "./globals.d.tsx", "src"]
+    "compilerOptions": {
+        "declaration": true,
+        "declarationMap": true,
+        "emitDeclarationOnly": false,
+        "outDir": "dist",
+        "composite": true
+    },
+    "include": ["lib", "lib/utilities", "./globals.d.ts" ]
 }
