@@ -17,18 +17,16 @@ export default function useArrayCursor<T>(value: T[], identifier: (item: T) => u
     const [ index, setIndex ] = useState<number>(0);
 
     useEffect(() => {
-        //clears the attributes if this ever gets unmounted.
-        return () => {
-            array.current = [];
-        }
-    }, []);
+        array.current = value;
+        setIndex(0);
+    }, [value]);
 
     //updates the cursor to the new array if there is a matching identifier
     useEffect(() => {
         if (array.current.length == 0) {
             return;
         }
-        
+
         const itemID = identifier(array.current[index]);
 
         const newCursorPosition = value.findIndex((item) => {
