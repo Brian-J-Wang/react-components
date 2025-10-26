@@ -5,7 +5,7 @@ type BoundingBoxProps = React.HTMLAttributes<HTMLDivElement> &{
     /** should the listeners fire? */
     isActive: boolean,
     /** fired when mouse clicks within the bounding box */
-    onBound?: (evt: MouseEvent) => void,
+    onWithinBound?: (evt: MouseEvent) => void,
     /** fired when the mouse clicks outside of the bounding box */
     onOutOfBound?: (evt: MouseEvent) => void,
 }
@@ -15,16 +15,18 @@ export type OutofBoundsHandle = {
 }
 
 /** An HTML div element with attached listeners that fires when a mouse a mouse click occurs */
-const BoundingBox: React.FC<BoundingBoxProps> = ({isActive, onBound, onOutOfBound, ...props}) => {
+const BoundingBox: React.FC<BoundingBoxProps> = ({isActive, onWithinBound = () => {}, onOutOfBound = () => {}, ...props}) => {
     const boundingDiv = useRef<HTMLDivElement>(null) as RefObject<HTMLDivElement>;
 
     useEffect(() => {
-        document.addEventListener("click", handleMouseDown);
+        if (isActive) {
+            document.addEventListener("click", handleMouseDown);
+        }
 
         return () => {
             document.removeEventListener("click", handleMouseDown);
         }
-    }, []);
+    });
 
     function handleMouseDown(evt: MouseEvent) {
         if (!isActive || evt.button != 0) {
@@ -37,9 +39,9 @@ const BoundingBox: React.FC<BoundingBoxProps> = ({isActive, onBound, onOutOfBoun
             x: evt.clientX,
             y: evt.clientY
         })) {
-            onBound && onBound(evt);
+            onWithinBound(evt);
         } else {
-            onOutOfBound && onOutOfBound(evt);
+            onOutOfBound(evt);
         }
 
         function getBounds() {
