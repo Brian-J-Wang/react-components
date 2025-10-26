@@ -36,10 +36,16 @@ const InputWithMenu: React.FC<RichInputProps> = ({ menuItems, onSubmit, config =
         })  
     }
 
-    const cursor = useArrayCursor(menuItems, (item) => item.id );
+    const cursor = useArrayCursor(menuItems, (item) => item.id);
 
     const submit = () => {
-        return onSubmit(input);
+        return onSubmit(input).then((shouldClearInput) => {
+            if (shouldClearInput) {
+                _setFilter("");
+                setInput("");
+                setMenuMode("select");
+            }
+        });
     }
 
     const setFilter = ( value: string ) => {

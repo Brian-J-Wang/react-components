@@ -64,7 +64,10 @@ const items: MenuItem[] = [
 
 export const InputWithMenuBasic = () => {
     return (
-        <InputWithMenu  onSubmit={() => new Promise<boolean>(() => true)} menuItems={items}>
+        <InputWithMenu onSubmit={(submission) => {
+            console.log(submission);
+            return Promise.resolve(true);
+        }} menuItems={items}>
             <Menu className={styles.menu}>
                 <MenuSlot render={(item, isActive) => (
                     <div className={`${styles.menuItem} ${isActive && styles.menuItemActive}`}>{item.name}</div>
