@@ -10,8 +10,8 @@ const Menu: React.FC<AttributeMenuProps> = ({className, onClick, ...props}) => {
     const { menuVisible, menuInputElement, menuMode, cursor } = RequireContext(InputWithMenuContext);
 
     useEffect(() => {
-        if (menuVisible) {
-            menuInputElement?.current.focus();
+        if (menuVisible && menuInputElement?.current) {
+            menuInputElement.current.focus();
         }
     }, [menuInputElement, menuVisible])
 
