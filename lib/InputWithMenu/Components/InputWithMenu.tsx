@@ -1,6 +1,6 @@
 import { RefObject, useRef, useState } from "react";
 import menuContext, { MenuItem } from "../Contexts/menuContext";
-import { InputWithMenuContext } from "../Contexts/inputWithMenuContext";
+import { InputWithMenuContext, validMenuStates } from "../Contexts/inputWithMenuContext";
 import { useArrayCursor } from "../Hooks";
 import { defaultInputWithMenuConfig, inputWithMenuConfig } from "../config";
 
@@ -23,9 +23,8 @@ const InputWithMenu: React.FC<RichInputProps> = ({ menuItems, onSubmit, config =
     const primaryInputElement = useRef<HTMLInputElement>(undefined) as RefObject<HTMLInputElement>;
     const menuInputElement = useRef<HTMLInputElement>(undefined) as RefObject<HTMLInputElement>;
     const [ input, setInput ] = useState<string>("");
-    const [ menuVisible, setMenuVisible ] = useState<boolean>(false);
     const [ filter, _setFilter ] = useState<string>("");
-    const [ menuMode, setMenuMode ] = useState<"select" | "display">("select");
+    const [ menuMode, _setMenuMode ] = useState<validMenuStates>("hidden");
 
     if (config.requireUnique) {
         const set = new Set();
@@ -43,7 +42,7 @@ const InputWithMenu: React.FC<RichInputProps> = ({ menuItems, onSubmit, config =
             if (shouldClearInput) {
                 _setFilter("");
                 setInput("");
-                setMenuMode("select");
+                _setMenuMode("hidden");
             }
         });
     }
@@ -94,16 +93,42 @@ const InputWithMenu: React.FC<RichInputProps> = ({ menuItems, onSubmit, config =
         }
     }
 
+    const onMenuItemClick = (item: MenuItem) => {
+        cursor.jumpCursor(cursor.array.findIndex(arrItem => arrItem.id == item.id));
+        setMenuMode("display");
+    }
+
+    const onMenuItemHover = (item: MenuItem) => {
+        cursor.jumpCursor(cursor.array.findIndex(arrItem => arrItem.id == item.id));
+    }
+
+    const setMenuMode = (state: validMenuStates) => {
+        switch(state) {
+            case "hidden":
+                _setFilter("");
+                _setMenuMode("hidden");
+                break;
+            case "select":
+                _setMenuMode("select");
+                break;
+            case "display":
+                _setMenuMode("display");
+                break;
+        }
+    }
+
     const onHandles = {
         onArrowDownPress,
         onArrowUpPress,
         onEnterPress,
-        onBackspacePress
+        onBackspacePress,
+        onMenuItemClick,
+        onMenuItemHover
     }
 
     return (
         <InputWithMenuContext.Provider value={{
-            input, setInput, menuVisible, setMenuVisible, submit, primaryInputElement, menuInputElement, onHandles, cursor, menuMode
+            input, setInput, submit, primaryInputElement, menuInputElement, onHandles, cursor, menuMode, setMenuMode
         }}>
             <menuContext.Provider value={{filter, setFilter, menuItems}}>
                 <div className={props.className} tabIndex={-1}>

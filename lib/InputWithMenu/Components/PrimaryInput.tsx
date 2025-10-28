@@ -8,12 +8,12 @@ type RichInputInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
 }
 
 const PrimaryInput: React.FC<RichInputInputProps> = ({className, ...props}) => {
-    const { input, setInput, setMenuVisible, submit } = RequireContext(InputWithMenuContext);
+    const { input, setInput, setMenuMode, submit, primaryInputElement } = RequireContext(InputWithMenuContext);
 
     const handleKeyDown = (evt: React.KeyboardEvent<HTMLInputElement>) => {
         if (evt.key == "/" && input.length == 0) {
             evt.preventDefault();
-            setMenuVisible(true);
+            setMenuMode("select");
         }
 
         if (evt.key == "Enter") {
@@ -26,12 +26,12 @@ const PrimaryInput: React.FC<RichInputInputProps> = ({className, ...props}) => {
     }
 
     const handleFocus = () => {
-        setMenuVisible(false);
+        setMenuMode("hidden");
     }
 
     return (
         <input value={input} onKeyDown={handleKeyDown} onChange={handleChange} className={`primary-input ${className}`} 
-        onFocus={handleFocus} {...props}/>
+        onFocus={handleFocus} ref={primaryInputElement} {...props}/>
     )
 }
 

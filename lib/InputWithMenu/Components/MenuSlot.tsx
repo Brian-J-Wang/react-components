@@ -8,7 +8,7 @@ type MenuSlotProps = {
 }
 
 const MenuSlot: React.FC<MenuSlotProps> = (props) => {
-    const { cursor } = requireContext(InputWithMenuContext);
+    const { cursor, onHandles } = requireContext(InputWithMenuContext);
     const { filter, menuItems } = requireContext(menuContext);
     return (
         <>
@@ -18,14 +18,8 @@ const MenuSlot: React.FC<MenuSlotProps> = (props) => {
                 }).map((item) => {
                     const element = props.render(item, cursor.current == item)
                     return cloneElement(element, {
-                        onMouseEnter: (evt) => {
-                            if (element.props.onMouseEnter) {
-                                element.props.onMouseEnter(evt);
-                            }
-                            
-                            const index = cursor.array.findIndex((arrItem) => arrItem.id == item.id);
-                            cursor.jumpCursor(index);
-                        }
+                        onMouseEnter: () => { onHandles.onMenuItemHover(item); },
+                        onMouseUp: () => { onHandles.onMenuItemClick(item); }
                     })
                 })
             }
